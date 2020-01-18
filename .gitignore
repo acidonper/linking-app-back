@@ -1,0 +1,17 @@
+node_modules
+*.log
+dump.rdb
+*~
+cov-*
+coverage
+plato
+.idea
+.DS_Store
+*.sw*
+dist
+stub
+.nyc_output
+.scannerwork
+package-lock.json
+.history
+.env
