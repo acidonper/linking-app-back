@@ -4,7 +4,7 @@ const app = Express();
 const mongodbConn = require("./controllers/mongodb/connection");
 const indexRouter = require("./routes/index");
 
-// mongodbConn();
+mongodbConn();
 
 app.use("/", indexRouter);
 
