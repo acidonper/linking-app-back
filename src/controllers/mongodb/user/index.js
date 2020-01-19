@@ -51,8 +51,8 @@ module.exports = {
             const userSearched = userModel.find(search);
             const findAction = await userSearched.exec();
 
-            if (findAction.length === 0)
-                throw `User not found providing search: ${search}`;
+            if (findAction.length === 0) return false;
+            // throw `User not found providing search: ${search}`;
             if (findAction.length > 1)
                 throw `User duplicated providing search: ${search}`;
 
@@ -78,12 +78,11 @@ module.exports = {
                 userSearched = userModel.find({ email: userLogin.email });
 
             const findAction = await userSearched.exec();
-
-            if (findAction.length === 0) throw `User ${userLogin} not found`;
+            if (findAction.length === 0) throw "User not found";
 
             const passwordDB = findAction[0].password;
             if (!passLib.compare(passwordDB, userLogin.password))
-                throw `Invalid Password`;
+                throw "Invalid Password";
 
             return true;
         } catch (error) {

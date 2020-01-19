@@ -11,8 +11,30 @@
 				{
 					"name": "/api/auth/login",
 					"request": {
-						"method": "GET",
-						"header": [],
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "test01",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test011234567890./*01",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "localhost:5000/api/auth/login",
 							"host": [

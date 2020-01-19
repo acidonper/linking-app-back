@@ -1,4 +1,4 @@
-const userLib = require("../../user/index");
+const userLib = require("../../index");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 

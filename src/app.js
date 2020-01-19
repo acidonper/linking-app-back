@@ -1,14 +1,14 @@
-require("dotenv").config({ path: "../.env" });
-const Express = require("express");
-const app = Express();
+require("dotenv").config();
+const express = require("express");
+const app = express();
 const mongodbConn = require("./controllers/mongodb/connection");
 const indexRouter = require("./routes/index");
 
 mongodbConn();
 
-// require("./passport/config")(app);
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+require("../src/controllers/auth/passport/index")(app);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 

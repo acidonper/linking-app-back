@@ -1,6 +1,4 @@
 const LocalStrategy = require("passport-local").Strategy;
-const passLib = require("../../password/index");
-const userLib = require("../../user/index");
 const authLib = require("../../index");
 
 module.exports = new LocalStrategy(
