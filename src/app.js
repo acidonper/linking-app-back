@@ -1,10 +1,14 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 const Express = require("express");
 const app = Express();
 const mongodbConn = require("./controllers/mongodb/connection");
 const indexRouter = require("./routes/index");
 
 mongodbConn();
+
+// require("./passport/config")(app);
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
 
