@@ -8,9 +8,6 @@ const opts = {
 };
 
 module.exports = new JwtStrategy(opts, async (tokenPayload, next) => {
-    console.log(
-        `JSON Web Token Strategy. Information -> token ${tokenPayload}`
-    );
     try {
         const user = await userLib.find({ _id: tokenPayload.sub });
 

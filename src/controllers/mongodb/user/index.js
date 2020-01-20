@@ -52,7 +52,6 @@ module.exports = {
             const findAction = await userSearched.exec();
 
             if (findAction.length === 0) return false;
-            // throw `User not found providing search: ${search}`;
             if (findAction.length > 1)
                 throw `User duplicated providing search: ${search}`;
 
@@ -85,6 +84,33 @@ module.exports = {
                 throw "Invalid Password";
 
             return true;
+        } catch (error) {
+            throw error;
+        }
+    },
+    loginjwt: async userLogin => {
+        try {
+            if (check.emptyObject(userLogin)) throw "Empty login object";
+            if (
+                !check.like(userLogin, { username: "baz", password: "pass" }) &&
+                !check.like(userLogin, { email: "baz", password: "pass" })
+            )
+                throw "Invalid login object";
+
+            let userSearched;
+
+            if (check.containsKey(userLogin, "username"))
+                userSearched = userModel.find({ username: userLogin.username });
+            if (check.containsKey(userLogin, "email"))
+                userSearched = userModel.find({ email: userLogin.email });
+
+            const findAction = await userSearched.exec();
+            if (findAction.length === 0) throw "User not found";
+
+            const passwordDB = findAction[0].password;
+            if (!passLib.compare(passwordDB, userLogin.password))
+                throw "Invalid Password";
+            return findAction[0];
         } catch (error) {
             throw error;
         }

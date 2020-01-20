@@ -3,7 +3,6 @@ const assert = require("assert");
 const authLib = require("../../../src/controllers/auth/index");
 const userLib = require("../../../src/controllers/mongodb/user/index");
 const userLogin = require("../../resources/userLogin");
-// const userTest = require("../../resources/userTest");
 
 describe("Authentication Library", () => {
     it("Should create a user", async () => {
@@ -14,7 +13,6 @@ describe("Authentication Library", () => {
             username: "robot123456789001",
             password: "robot1234567890./*01"
         });
-        console.log(login);
         assert.equal(login, "User Logged");
     });
     it("Should delete an user", async () => {
@@ -24,6 +22,7 @@ describe("Authentication Library", () => {
         );
     });
     // it("Should create a user", async () => {
+    //     const userTest = require("../../resources/userTest");
     //     assert.equal(await userLib.new(userTest), true);
     // });
 });

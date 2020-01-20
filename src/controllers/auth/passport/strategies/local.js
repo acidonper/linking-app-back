@@ -3,24 +3,21 @@ const authLib = require("../../index");
 
 module.exports = new LocalStrategy(
     {
-        usernameField: "email",
+        usernameField: "username",
         passwordField: "password",
         session: false
     },
-    async (login, next) => {
-        console.log(`Local Strategy. Credentials -> ${login}`);
+    async (username, password, next) => {
         try {
-            if (check.emptyObject(login)) throw "Empty login object";
-            if (
-                !check.like(login, { username: "baz", password: "pass" }) &&
-                !check.like(login, { email: "baz", password: "pass" })
-            )
-                throw "Invalid login object";
-
-            if (authLib.login(login)) next(null, user);
-            next(null, false, { message: "Invalid credentials" });
+            const login = {
+                username: username,
+                password: password
+            };
+            const user = await authLib.loginjwt(login);
+            if (user) return next(null, user);
+            return next(null, false, { message: "Invalid credentials" });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
