@@ -21,8 +21,4 @@ describe("Authentication Library", () => {
             true
         );
     });
-    // it("Should create a user", async () => {
-    //     const userTest = require("../../resources/userTest");
-    //     assert.equal(await userLib.new(userTest), true);
-    // });
 });

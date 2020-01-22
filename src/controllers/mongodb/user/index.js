@@ -1,6 +1,7 @@
 const userModel = require("../../../models/user");
 const passLib = require("../../auth/password/index");
-var check = require("check-types");
+const check = require("check-types");
+const matchLib = require("../match/index");
 
 module.exports = {
     new: async user => {
@@ -48,7 +49,7 @@ module.exports = {
             )
                 throw "Invalid search object";
 
-            const userSearched = userModel.find(search);
+            const userSearched = userModel.find(search).select("+role");
             const findAction = await userSearched.exec();
 
             if (findAction.length === 0) return false;
@@ -56,6 +57,39 @@ module.exports = {
                 throw `User duplicated providing search: ${search}`;
 
             return findAction[0];
+        } catch (error) {
+            throw error;
+        }
+    },
+    adminSearch: async search => {
+        try {
+            const usersSearched = userModel.find(search);
+            const findAction = await usersSearched.exec();
+            return findAction;
+        } catch (error) {
+            throw error;
+        }
+    },
+    userSearch: async search => {
+        try {
+            delete search.password;
+            search.role = "user";
+            const usersSearched = userModel
+                .find(search)
+                .select("-password -role -__v -_id");
+            const findAction = await usersSearched.exec();
+            return findAction;
+        } catch (error) {
+            throw error;
+        }
+    },
+    userSearchMatchs: async usernameQuery => {
+        try {
+            const usersSearched = userModel.find(usernameQuery);
+            const findAction = await usersSearched.exec();
+            if (findAction.length !== 1) throw "Username provided not found";
+            const usersmatched = await matchLib(findAction[0]);
+            return usersmatched;
         } catch (error) {
             throw error;
         }
@@ -70,11 +104,14 @@ module.exports = {
                 throw "Invalid login object";
 
             let userSearched;
-
             if (check.containsKey(userLogin, "username"))
-                userSearched = userModel.find({ username: userLogin.username });
+                userSearched = userModel
+                    .find({ username: userLogin.username })
+                    .select("+password");
             if (check.containsKey(userLogin, "email"))
-                userSearched = userModel.find({ email: userLogin.email });
+                userSearched = userModel
+                    .find({ email: userLogin.email })
+                    .select("+password");
 
             const findAction = await userSearched.exec();
             if (findAction.length === 0) throw "User not found";
@@ -100,16 +137,22 @@ module.exports = {
             let userSearched;
 
             if (check.containsKey(userLogin, "username"))
-                userSearched = userModel.find({ username: userLogin.username });
+                userSearched = userModel
+                    .find({ username: userLogin.username })
+                    .select("+password");
             if (check.containsKey(userLogin, "email"))
-                userSearched = userModel.find({ email: userLogin.email });
+                userSearched = userModel
+                    .find({ email: userLogin.email })
+                    .select("+password");
 
             const findAction = await userSearched.exec();
-            if (findAction.length === 0) throw "User not found";
+
+            if (findAction.length === 0) return { error: "User not found" };
 
             const passwordDB = findAction[0].password;
             if (!passLib.compare(passwordDB, userLogin.password))
-                throw "Invalid Password";
+                return { error: "Invalid Password" };
+
             return findAction[0];
         } catch (error) {
             throw error;

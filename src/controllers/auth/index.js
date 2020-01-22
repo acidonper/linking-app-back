@@ -31,8 +31,12 @@ module.exports = {
                 throw "Invalid login object";
 
             const userLogin = await mongoUserLib.loginjwt(login);
-            if (userLogin) return userLogin;
-            return "Invalid Credentials";
+
+            if (!Object.keys(userLogin).includes("error")) {
+                return userLogin;
+            } else {
+                return { error: "Invalid Credentials" };
+            }
         } catch (error) {
             throw error;
         }
@@ -43,24 +47,22 @@ module.exports = {
                 "local",
                 { session: false },
                 (error, user, info) => {
-                    if (error !== null)
-                        res.status(500).json({
-                            message: "Internal Server Error"
-                        });
+                    if (!user) {
+                        res.status(401).json({ message: info });
+                    } else {
+                        const payload = {
+                            sub: user._id,
+                            exp: Date.now() + parseInt(process.env.JWT_EXPIRES),
+                            username: user.username
+                        };
 
-                    if (info) res.status(400).json({ message: info });
+                        const token = jwt.sign(
+                            JSON.stringify(payload),
+                            process.env.JWT_SECRET
+                        );
 
-                    const payload = {
-                        sub: user._id,
-                        exp: Date.now() + parseInt(process.env.JWT_EXPIRES),
-                        username: user.username
-                    };
-
-                    const token = jwt.sign(
-                        JSON.stringify(payload),
-                        process.env.JWT_SECRET
-                    );
-                    res.status(200).json({ data: { token } });
+                        res.status(200).json({ message: { token } });
+                    }
                 }
             )(req, res);
         } catch (error) {

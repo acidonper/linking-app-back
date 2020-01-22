@@ -14,10 +14,14 @@ module.exports = new LocalStrategy(
                 password: password
             };
             const user = await authLib.loginjwt(login);
-            if (user) return next(null, user);
-            return next(null, false, { message: "Invalid credentials" });
+
+            if (!Object.keys(user).includes("error")) {
+                return next(null, user);
+            } else {
+                return next(null, false, { error: "Invalid credentials" });
+            }
         } catch (error) {
-            return next(error);
+            next(error);
         }
     }
 );
