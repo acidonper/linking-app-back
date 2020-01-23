@@ -16,7 +16,9 @@ const createUsers = () => {
                 city: "XXX",
                 physicalCondition: "curvy",
                 activity: "homeLover",
-                lifeStyle: "studying"
+                lifeStyle: "studying",
+                kidsLover: false,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -44,7 +46,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "fitness",
                 activity: "energetic",
-                lifeStyle: "studying"
+                lifeStyle: "studying",
+                kidsLover: true,
+                petsLover: false
             },
             preferences: {
                 culturalInterest: "low",
@@ -72,7 +76,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "homeLover",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "high",
@@ -100,7 +106,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "thin",
                 activity: "active",
-                lifeStyle: "studying"
+                lifeStyle: "studying",
+                kidsLover: false,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -128,7 +136,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "thin",
                 activity: "homeLover",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: false
             },
             preferences: {
                 culturalInterest: "medium",
@@ -156,7 +166,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "thin",
                 activity: "active",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -184,7 +196,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "homeLover",
-                lifeStyle: "enjoying"
+                lifeStyle: "enjoying",
+                kidsLover: false,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "high",
@@ -212,7 +226,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "energetic",
-                lifeStyle: "enjoying"
+                lifeStyle: "enjoying",
+                kidsLover: true,
+                petsLover: false
             },
             preferences: {
                 culturalInterest: "medium",
@@ -240,7 +256,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "fitness",
                 activity: "active",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
@@ -268,7 +286,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "active",
-                lifeStyle: "enjoying"
+                lifeStyle: "enjoying",
+                kidsLover: false,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -296,7 +316,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "active",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: false
             },
             preferences: {
                 culturalInterest: "medium",
@@ -324,7 +346,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "active",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -352,7 +376,9 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "thin",
                 activity: "active",
-                lifeStyle: "working"
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",

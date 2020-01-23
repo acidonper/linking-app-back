@@ -11,13 +11,13 @@ router.get("/", isAuthenticated, async (req, res) => {
                 message: { error: "Bad parameters" }
             });
         const query = { username: id };
-        const users = await userLib.userSearchMatchs(query);
+        const users = await userLib.userSearchMatches(query);
         res.status(200).json({
             users: users
         });
     } catch (error) {
         res.status(500).json({
-            error: error
+            error: "Internal Server Error"
         });
     }
 });

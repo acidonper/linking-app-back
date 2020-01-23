@@ -61,6 +61,27 @@ module.exports = {
             throw error;
         }
     },
+    getId: async search => {
+        try {
+            if (check.emptyObject(search)) throw "Empty search object";
+            if (
+                !check.like(search, { username: "baz" }) &&
+                !check.like(search, { email: "baz" })
+            )
+                throw "Invalid search object";
+
+            const userSearched = userModel.find(search);
+            const findAction = await userSearched.exec();
+
+            if (findAction.length === 0) return false;
+            if (findAction.length > 1)
+                throw `User duplicated providing search: ${search}`;
+
+            return findAction[0]._id;
+        } catch (error) {
+            throw error;
+        }
+    },
     adminSearch: async search => {
         try {
             const usersSearched = userModel.find(search);
@@ -83,12 +104,14 @@ module.exports = {
             throw error;
         }
     },
-    userSearchMatchs: async usernameQuery => {
+    userSearchMatches: async usernameQuery => {
         try {
             const usersSearched = userModel.find(usernameQuery);
             const findAction = await usersSearched.exec();
             if (findAction.length !== 1) throw "Username provided not found";
-            const usersmatched = await matchLib(findAction[0]);
+            const usersmatched = await matchLib.searchSuggestions(
+                findAction[0]
+            );
             return usersmatched;
         } catch (error) {
             throw error;

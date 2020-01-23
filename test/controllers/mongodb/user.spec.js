@@ -23,8 +23,8 @@ describe("User Library Test", () => {
         const search = await userLib.userSearch({ username: newUser.username });
         expect(typeof search).toBe("object");
     });
-    it("Should find an user using userSearchMatchs", async () => {
-        const search = await userLib.userSearchMatchs({
+    it("Should find an user using userSearchMatches", async () => {
+        const search = await userLib.userSearchMatches({
             username: newUser.username
         });
         expect(typeof search).toBe("object");

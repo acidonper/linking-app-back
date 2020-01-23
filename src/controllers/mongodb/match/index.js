@@ -1,41 +1,52 @@
-const matchModel = require("../../../models/matchs");
-const userModel = require("../../../models/user");
+const matchAlgorithm = require("./algorithm");
+const matchModel = require("../../../models/matches");
+const userLib = require("../user/index");
 
-module.exports = async user => {
-    try {
-        // Move to another microservice
-        // Destructure
-        const { preferences, _id, information } = user;
+module.exports = {
+    searchSuggestions: async user => {
+        try {
+            const usersSuggestions = matchModel
+                .find({
+                    user: user._id
+                })
+                .populate({
+                    path: "suggestions",
+                    model: "Users",
+                    select: "-_id -name -lastname -email -role -__v"
+                });
 
-        if (
-            information.education === "university" &&
-            preferences.culturalInterest === "low"
-        )
-            preferences.culturalInterest = "medium";
-        const usersSearch = userModel
-            .find({
-                "information.age": { $gte: preferences.ageRange.min }
-            })
-            .find({
-                "information.age": { $lte: preferences.ageRange.max }
-            })
-            .find({ "information.gender": preferences.sexualPreferences })
-            .find({ "information.city": information.city });
-        // .find({
-        //     "preference.culturalInterest": preferences.culturalInterest
-        // })
-        // .find({ "preference.sportCadence": preferences.sportCadence })
-        // .find({ "preference.travelCadence": preferences.travelCadence })
-        // .find({ "preference.owlOrSkyLark": preferences.owlOrSkyLark });
+            const suggestions = await usersSuggestions.exec();
 
-        const users = await usersSearch.exec();
+            if (suggestions.length === 0) {
+                const calculatedSuggestion = await matchAlgorithm(user);
+                return calculatedSuggestion;
+            }
 
-        console.log(preferences);
-        console.log(_id);
-        console.log(information);
+            return suggestions;
+        } catch (error) {
+            throw error;
+        }
+    },
+    includeBeloved: async newBeloved => {
+        try {
+            const { username, suggestionUsername } = newBeloved;
 
-        return users;
-    } catch (error) {
-        throw error;
+            console.log(username, suggestionUsername);
+
+            console.log(userLib);
+
+            const userID = await userLib.userSearch({ username: username });
+
+            // const userID = await userLib.getId({ username: username });
+            // const suggestionID = await userLib.getId({
+            //     username: suggestionUsername
+            // });
+
+            console.log(userID, suggestionID);
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
     }
 };

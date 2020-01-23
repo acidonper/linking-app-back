@@ -12,7 +12,9 @@ module.exports = {
         city: "XXX",
         physicalCondition: "curvy",
         activity: "active",
-        lifeStyle: "working"
+        lifeStyle: "working",
+        kidsLover: true,
+        petsLover: true
     },
     preferences: {
         culturalInterest: "medium",

@@ -73,6 +73,14 @@ const userSchema = new Schema({
             required: [true, "lifeStyle is required"],
             enum: ["working", "studying", "enjoying"]
         },
+        kidsLover: {
+            type: Boolean,
+            required: [true, "kidsLover is required"]
+        },
+        petsLover: {
+            type: Boolean,
+            required: [true, "petsLover is required"]
+        },
         city: {
             type: String,
             required: [true, "city is required"]
