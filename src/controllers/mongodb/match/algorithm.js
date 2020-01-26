@@ -1,9 +1,19 @@
 const matchModel = require("../../../models/matches");
 const userModel = require("../../../models/user");
+const check = require("check-types");
 
-module.exports = async user => {
+module.exports = async search => {
     try {
-        const { information, preferences } = user;
+        if (check.emptyObject(search)) throw "Empty search object";
+        if (
+            !check.like(search, { username: "baz" }) &&
+            !check.like(search, { email: "baz" })
+        )
+            throw "Invalid search object";
+
+        const userSearch = userModel.findOne(search);
+        const userDefinition = await userSearch.exec();
+        const { information, preferences } = userDefinition;
 
         if (
             information.education === "university" &&
@@ -22,13 +32,12 @@ module.exports = async user => {
             .find({ "information.city": information.city })
             .find({ "information.kidsLover": information.kidsLover })
             .find({ "information.PetsLover": information.PetsLover });
-
         // .find({
         //     "preference.culturalInterest": preferences.culturalInterest
         // })
         // .find({ "preference.sportCadence": preferences.sportCadence })
         // .find({ "preference.travelCadence": preferences.travelCadence })
-        // .find({ "preference.owlOrSkyLark": preferences.owlOrSkyLark });
+        // .find({ "preference.owlOrSkyLark": preferences.owlOrSkyLark })
 
         const users = await usersSearch.exec();
 
@@ -39,12 +48,22 @@ module.exports = async user => {
         });
 
         const newSuggestions = new matchModel(
-            { user: user._id, suggestions: usersIDs },
+            { user: userDefinition._id, suggestions: usersIDs },
             { autoIndex: false }
         );
         const suggestions = await newSuggestions.save();
 
-        return [suggestions];
+        const userSuggestionsSearch = matchModel
+            .findOne({ user: userDefinition._id })
+            .select({ suggestions: 1 })
+            .populate({
+                path: "suggestions",
+                model: "Users",
+                select: "-_id -name -lastname -email -role -__v"
+            });
+        const searchBelovedAction = await userSuggestionsSearch.exec();
+
+        return searchBelovedAction.suggestions;
     } catch (error) {
         throw error;
     }

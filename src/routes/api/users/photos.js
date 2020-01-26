@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { isAuthenticated } = require("../../../middlewares/passport/index");
-const matchLib = require("../../../controllers/mongodb/match/index");
+const userLib = require("../../../controllers/mongodb/user/index");
 
 router.get("/", isAuthenticated, async (req, res) => {
     try {
@@ -11,9 +11,9 @@ router.get("/", isAuthenticated, async (req, res) => {
                 message: { error: "Bad parameters" }
             });
         const query = { username: id };
-        const users = await matchLib.searchMatches(query);
+        const userPhotos = await userLib.searchUserPhotos(query);
         res.status(200).json({
-            users: users
+            userPhotos: userPhotos
         });
     } catch (error) {
         console.log(error);
@@ -23,24 +23,20 @@ router.get("/", isAuthenticated, async (req, res) => {
     }
 });
 
-router.delete("/", isAuthenticated, async (req, res) => {
+router.post("/", isAuthenticated, async (req, res) => {
     try {
         const id = req.user.username;
-        const { suggestionID } = req.body;
-
-        if (!id || !suggestionID) {
+        const { photo } = req.body;
+        if (!id || !photo)
             res.status(400).json({
                 message: { error: "Bad parameters" }
             });
-        } else {
-            const query = { username: id, suggestionUsername: suggestionID };
-            const result = await matchLib.unmatch(query);
-            if (result) {
-                res.status(200).json({ users: result });
-            } else {
-                throw "Internal Server Error";
-            }
-        }
+        const user = { username: id };
+        await userLib.addPhoto(user, photo);
+        const userPhotos = await userLib.searchUserPhotos(user);
+        res.status(200).json({
+            userPhotos: userPhotos
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({

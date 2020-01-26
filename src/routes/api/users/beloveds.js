@@ -5,7 +5,7 @@ const matchLib = require("../../../controllers/mongodb/match/index");
 
 router.post("/", isAuthenticated, async (req, res) => {
     try {
-        const { id } = req.query;
+        const id = req.user.username;
         const { suggestionID } = req.body;
 
         if (!id || !suggestionID) {
@@ -13,10 +13,30 @@ router.post("/", isAuthenticated, async (req, res) => {
                 message: { error: "Bad parameters" }
             });
         } else {
-            console.log(id, suggestionID);
             const query = { username: id, suggestionUsername: suggestionID };
-            const saved = await matchLib.includeBeloved(query);
-            if (saved) res.status(200).json({ users: "hola" });
+            const result = await matchLib.includeBeloved(query);
+            if (result) {
+                res.status(200).json({ users: result });
+            } else {
+                throw "Internal Server Error";
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal Server Error"
+        });
+    }
+});
+
+router.get("/", isAuthenticated, async (req, res) => {
+    try {
+        const id = req.user.username;
+        const query = { username: id };
+        const saved = await matchLib.searchBeloveds(query);
+        if (saved) {
+            res.status(200).json({ users: saved });
+        } else {
             throw "Internal Server Error";
         }
     } catch (error) {

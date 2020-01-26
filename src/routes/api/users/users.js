@@ -29,8 +29,9 @@ router.post("/", isAuthenticated, async (req, res) => {
     try {
         const userAdmin = await isAdmin(req.user.username);
         if (userAdmin) {
+            await userLib.new(req.body);
             res.status(200).json({
-                message: `User ${req.user.username} -> Authorized to create users`
+                message: `User ${req.body.username} created`
             });
         } else {
             res.status(200).json({
@@ -38,6 +39,7 @@ router.post("/", isAuthenticated, async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             message: error
         });

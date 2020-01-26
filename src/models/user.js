@@ -41,6 +41,7 @@ const userSchema = new Schema({
             enum: ["online", "offline"]
         }
     },
+    photos: [String],
     information: {
         age: {
             type: Number,

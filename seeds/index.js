@@ -391,6 +391,37 @@ const createUsers = () => {
                     max: 30
                 }
             }
+        },
+        {
+            name: "user13",
+            lastname: "user13",
+            username: "user13",
+            password: "user13",
+            email: "user13@example.com",
+            role: "user",
+            photos: ["http://photo1.es", "http://photo2.es"],
+            information: {
+                age: 29,
+                gender: "male",
+                education: "highSchool",
+                city: "Madrid",
+                physicalCondition: "thin",
+                activity: "active",
+                lifeStyle: "working",
+                kidsLover: true,
+                petsLover: true
+            },
+            preferences: {
+                culturalInterest: "medium",
+                sportCadence: "low",
+                travelCadence: "high",
+                owlOrSkyLark: "skylark",
+                sexualPreferences: "both",
+                ageRange: {
+                    min: 28,
+                    max: 30
+                }
+            }
         }
     ];
 

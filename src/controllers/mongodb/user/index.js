@@ -1,11 +1,13 @@
 const userModel = require("../../../models/user");
 const passLib = require("../../auth/password/index");
+const photosLib = require("../../clouddinary/index");
 const check = require("check-types");
-const matchLib = require("../match/index");
 
 module.exports = {
     new: async user => {
         try {
+            if (check.emptyObject(user)) throw "Empty search object";
+
             const { password } = user;
 
             if (check.emptyString(password)) throw "Empty password provided";
@@ -104,15 +106,33 @@ module.exports = {
             throw error;
         }
     },
-    userSearchMatches: async usernameQuery => {
+    searchUserPhotos: async search => {
         try {
-            const usersSearched = userModel.find(usernameQuery);
+            if (check.emptyObject(search)) throw "Empty search object";
+            if (
+                !check.like(search, { username: "baz" }) &&
+                !check.like(search, { email: "baz" })
+            )
+                throw "Invalid search object";
+
+            const usersSearched = userModel.findOne(search).select("photos");
             const findAction = await usersSearched.exec();
-            if (findAction.length !== 1) throw "Username provided not found";
-            const usersmatched = await matchLib.searchSuggestions(
-                findAction[0]
-            );
-            return usersmatched;
+            return findAction;
+        } catch (error) {
+            throw error;
+        }
+    },
+    addPhoto: async (user, photo) => {
+        try {
+            if (check.emptyObject(user)) throw "Empty search object";
+            if (
+                !check.like(user, { username: "baz" }) &&
+                !check.like(user, { email: "baz" })
+            )
+                throw "Invalid user object";
+
+            const newPhoto = photosLib.uploadPhoto(user.username, photo);
+            return newPhoto;
         } catch (error) {
             throw error;
         }
