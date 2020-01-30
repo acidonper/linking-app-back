@@ -131,8 +131,32 @@ module.exports = {
             )
                 throw "Invalid user object";
 
-            const newPhoto = photosLib.uploadPhoto(user.username, photo);
-            return newPhoto;
+            const newPhoto = await photosLib.uploadPhoto(user.username, photo);
+            const userAddPhoto = userModel.findOneAndUpdate(user, {
+                $addToSet: { photos: newPhoto.secure_url }
+            });
+            await userAddPhoto.exec();
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    },
+    deletePhoto: async (user, photo) => {
+        try {
+            if (check.emptyObject(user)) throw "Empty search object";
+            if (
+                !check.like(user, { username: "baz" }) &&
+                !check.like(user, { email: "baz" })
+            )
+                throw "Invalid user object";
+
+            const userDeletePhoto = userModel.findOneAndUpdate(user, {
+                $pull: { photos: photo }
+            });
+            await userDeletePhoto.exec();
+
+            return true;
         } catch (error) {
             throw error;
         }

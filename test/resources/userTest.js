@@ -1,12 +1,12 @@
 module.exports = {
-    name: "test01",
-    lastname: "test01",
-    username: "test01",
-    password: "test011234567890./*01",
-    email: "test01@test01.com",
+    name: "Name0111",
+    lastname: "Latest0111",
+    username: "robot1234567890011",
+    password: "robot1234567890./*01",
+    email: "name0111@latest.com",
     role: "user",
     information: {
-        age: 34,
+        age: 32,
         gender: "male",
         education: "university",
         city: "XXX",
@@ -23,8 +23,8 @@ module.exports = {
         owlOrSkyLark: "skylark",
         sexualPreferences: "both",
         ageRange: {
-            min: 34,
-            max: 34
+            min: 32,
+            max: 32
         }
     }
 };

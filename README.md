@@ -94,3 +94,8 @@ _User_ is a MongoDB Object which has a set of fields which define ir personal in
         -   beloveds (POST) Query: ID (username) Params: suggestionID (sername suggestion loved)
 
 There are implemented some methods in order to expose required information,
+
+## Testing
+
+-   `*`.spec.js -> Unity Test
+-   `*`.test.js -> Integration Test

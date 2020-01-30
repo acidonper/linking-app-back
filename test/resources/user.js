@@ -1,9 +1,9 @@
 module.exports = {
-    name: "Name",
-    lastname: "Latest",
+    name: "robot1234567890",
+    lastname: "robot1234567890",
     username: "robot1234567890",
     password: "robot1234567890./*01",
-    email: "name@latest.com",
+    email: "robot1234567890@latest.com",
     role: "user",
     information: {
         age: 32,
@@ -24,7 +24,7 @@ module.exports = {
         sexualPreferences: "both",
         ageRange: {
             min: 32,
-            max: 33
+            max: 32
         }
     }
 };

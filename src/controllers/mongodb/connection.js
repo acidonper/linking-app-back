@@ -10,7 +10,9 @@ module.exports = () => {
     mongoose
         .connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+            useFindAndModify: false
         })
         .then(result => {
             console.log(

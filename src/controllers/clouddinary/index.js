@@ -9,10 +9,9 @@ const cloudinary = require("cloudinary").v2;
 // });
 
 module.exports = {
-    uploadPhoto: (user, photo) => {
+    uploadPhoto: async (user, photo) => {
         console.log(user, photo);
-        cloudinary.uploader.upload("./files/sample.jpg", function(result) {
-            console.log(result);
-        });
+        const newPhoto = await cloudinary.uploader.upload("./files/sample.jpg");
+        return newPhoto;
     }
 };
