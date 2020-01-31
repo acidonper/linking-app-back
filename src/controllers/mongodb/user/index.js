@@ -2,15 +2,26 @@ const userModel = require("../../../models/user");
 const passLib = require("../../auth/password/index");
 const photosLib = require("../../clouddinary/index");
 const check = require("check-types");
+const uuid = require("uuid/v1");
+const mailer = require("../../mail/index");
 
 module.exports = {
     new: async user => {
         try {
             if (check.emptyObject(user)) throw "Empty search object";
 
-            const { password } = user;
+            const { password, email } = user;
+
+            user.confirmationCode = uuid();
 
             if (check.emptyString(password)) throw "Empty password provided";
+
+            // const mailSent = await mailer.sendConfirmation(
+            //     email,
+            //     user.confirmationCode
+            // );
+            // user.status = "disable";
+            user.status = "active";
 
             const pass = passLib.encrypt(password);
             user.password = pass;
@@ -221,6 +232,19 @@ module.exports = {
                 return { error: "Invalid Password" };
 
             return findAction[0];
+        } catch (error) {
+            throw error;
+        }
+    },
+    confirm: async confirmationcode => {
+        try {
+            const userSearched = userModel.findOneAndUpdate(
+                { confirmationCode: confirmationcode },
+                { status: "enable" }
+            );
+            const findAction = await userSearched.exec();
+            if (findAction === null) return false;
+            return true;
         } catch (error) {
             throw error;
         }

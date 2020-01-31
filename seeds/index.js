@@ -9,6 +9,8 @@ const createUsers = () => {
             password: process.env.APP_ADMIN_PASS,
             email: "admin@example.com",
             role: "admin",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 18,
                 gender: "male",
@@ -39,6 +41,8 @@ const createUsers = () => {
             password: "user01",
             email: "user01@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 31,
                 gender: "male",
@@ -69,6 +73,8 @@ const createUsers = () => {
             password: "user02",
             email: "user02@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 35,
                 gender: "female",
@@ -99,6 +105,8 @@ const createUsers = () => {
             password: "user03",
             email: "user03@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 24,
                 gender: "male",
@@ -129,6 +137,8 @@ const createUsers = () => {
             password: "user04",
             email: "user04@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 31,
                 gender: "male",
@@ -159,6 +169,8 @@ const createUsers = () => {
             password: "user05",
             email: "user05@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 42,
                 gender: "female",
@@ -189,6 +201,8 @@ const createUsers = () => {
             password: "user06",
             email: "user06@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 26,
                 gender: "female",
@@ -219,6 +233,8 @@ const createUsers = () => {
             password: "user07",
             email: "user07@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 27,
                 gender: "female",
@@ -249,6 +265,8 @@ const createUsers = () => {
             password: "user08",
             email: "user08@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 33,
                 gender: "male",
@@ -279,6 +297,8 @@ const createUsers = () => {
             password: "user09",
             email: "user09@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 27,
                 gender: "female",
@@ -309,6 +329,8 @@ const createUsers = () => {
             password: "user10",
             email: "user10@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 33,
                 gender: "female",
@@ -339,6 +361,8 @@ const createUsers = () => {
             password: "user11",
             email: "user11@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 31,
                 gender: "female",
@@ -369,6 +393,8 @@ const createUsers = () => {
             password: "user12",
             email: "user12@example.com",
             role: "user",
+            status: "active",
+            photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 29,
                 gender: "male",
@@ -399,6 +425,7 @@ const createUsers = () => {
             password: "user13",
             email: "user13@example.com",
             role: "user",
+            status: "active",
             photos: ["http://photo1.es", "http://photo2.es"],
             information: {
                 age: 29,
@@ -429,11 +456,7 @@ const createUsers = () => {
         try {
             await libUsers.new(user);
         } catch (error) {
-            if (!error.errors.email.message) {
-                console.log(error);
-            } else {
-                console.log("Creating seeds...");
-            }
+            console.log("Creating seeds...");
         }
     });
 };

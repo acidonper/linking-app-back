@@ -41,6 +41,9 @@ JWT_SECRET="xxxxxxxxxxxxxxxxxxxxxx"
 JWT_EXPIRES="30000"
 APP_ADMIN_NAME=adminuser01
 APP_ADMIN_PASS="xxxxxxxxxxxxxxxxxxxxxx"
+CLOUDINARY_URL=cloudinary://xxxx:xxxxx@xxxxxx
+USER_NODEMAILER=xxxxx@xxxxxx
+PASSWORD_NODEMAILER=xxxxxx
 ```
 
 ## Models

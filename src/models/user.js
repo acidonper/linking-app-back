@@ -32,6 +32,14 @@ const userSchema = new Schema({
         required: [true, "role is required"],
         enum: ["admin", "user"]
     },
+    status: {
+        type: String,
+        required: [true, "status is required"],
+        enum: ["active", "disable"]
+    },
+    confirmationCode: {
+        type: String
+    },
     chat: {
         id: {
             type: String

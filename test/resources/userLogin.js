@@ -5,6 +5,8 @@ module.exports = {
     password: "robot1234567890./*01",
     email: "name01@latest.com",
     role: "user",
+    status: "active",
+    photos: ["http://photo1.es", "http://photo2.es"],
     information: {
         age: 32,
         gender: "male",
