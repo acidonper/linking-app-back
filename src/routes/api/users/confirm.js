@@ -11,7 +11,6 @@ router.get("/:confirmationcode", async (req, res) => {
             });
 
         const userConfirmation = await userLib.confirm(confirmationcode);
-        console.log(userConfirmation);
         if (userConfirmation) {
             res.status(200).json({
                 message: "User Confirmed! Please, login!"

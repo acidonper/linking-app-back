@@ -2,7 +2,7 @@ module.exports = ({ email, confirmationCode }) => {
     return `<h1>Bienvenido ${email} </h1>
       <h3>Ya solo queda un paso!!!</h3>
       <p>Para completar la subscripción tiene que clickar en el siguiente enlace</p>
-        <a href="http://localhost:3000/users/codeconfirmation/${confirmationCode}">Pulse aquí</a>
+        <a href="${process.env.URL_CONFIRM_NODEMAILER}/${confirmationCode}">Pulse aquí</a>
 
       <p>---</p>
       <h1>Welcome ${email} </h1>

@@ -16,12 +16,14 @@ module.exports = {
 
             if (check.emptyString(password)) throw "Empty password provided";
 
-            // const mailSent = await mailer.sendConfirmation(
-            //     email,
-            //     user.confirmationCode
-            // );
-            // user.status = "disable";
-            user.status = "active";
+            const mailerActivation = process.env.CONFIRMATION_NODEMAILER;
+
+            if (mailerActivation === "true") {
+                await mailer.sendConfirmation(email, user.confirmationCode);
+                user.status = "disable";
+            } else {
+                user.status = "active";
+            }
 
             const pass = passLib.encrypt(password);
             user.password = pass;
