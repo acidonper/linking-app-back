@@ -1,6 +1,6 @@
-# Liking Back
+# Linking App Back
 
-_Liking Back_ is a NodeJS project which provides an API to allow _Liking Front_ customers access to some _Liking App_ information. Regarding technologies involved, the following list offer an application overview:
+_Linking App Back_ is a NodeJS project which provides an API to allow _Linking Front_ customers access to some _Linking App_ information. Regarding technologies involved, the following list offer an application overview:
 
 -   NodeJS
 -   MongoDB
@@ -10,7 +10,7 @@ _Liking Back_ is a NodeJS project which provides an API to allow _Liking Front_ 
 
 ## Authentication
 
-JWT and tradicional user/password login are available in this project. It is important to bear in mind that JWT is the standard authentication method for **/api`*`** routes.
+JWT and traditional user/password login are available in this project. It is important to bear in mind that JWT is the standard authentication method for **/api`*`** routes.
 
 In order to understand the implementation, it is required to review the following files:
 

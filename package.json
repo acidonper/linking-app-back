@@ -1,5 +1,5 @@
 {
-    "name": "liking-back",
+    "name": "linking-app-back",
     "version": "1.0.0",
     "description": "Meet someone as your really want to",
     "main": "src/app.js",
@@ -9,14 +9,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/acidonper/tfm-back.git"
+        "url": "git+https://github.com/acidonper/linking-app-back.git"
     },
     "author": "Asier Cidon",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/acidonper/tfm-back/issues"
+        "url": "https://github.com/acidonper/linking-app-back/issues"
     },
-    "homepage": "https://github.com/acidonper/tfm-back#readme",
+    "homepage": "https://github.com/acidonper/linking-app-back#readme",
     "dependencies": {
         "bcrypt": "^3.0.7",
         "chai": "^4.2.0",
