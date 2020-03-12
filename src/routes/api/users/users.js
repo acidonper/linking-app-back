@@ -34,7 +34,7 @@ router.post("/", isAuthenticated, async (req, res) => {
                 message: `User ${req.body.username} created`
             });
         } else {
-            res.status(200).json({
+            res.status(401).json({
                 message: `Not authorized to create users`
             });
         }

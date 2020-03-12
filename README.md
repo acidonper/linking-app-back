@@ -121,20 +121,21 @@ There are implemented some express routes in order to expose required informatio
         -   suggestions (GET) Query: ID (username)
         -   beloveds (POST) Query: ID (username) Params: suggestionID (sername suggestion loved)
 
-| Path | a     | s           | Method | Req                    | Res                      | Objective                                                         |
-| ---- | ----- | ----------- | ------ | ---------------------- | ------------------------ | ----------------------------------------------------------------- |
-| api  | auth  | login       | POST   | User Credential        | JWT Token                | Generate JWT Token in order to authenticate and allow user access |
-| api  | users | /           | GET    | User Query             | List of Users            | Get application user through mongodb query                        |
-|      |       | /           | POST   | User Object            | Confirmation message     | Create an app user                                                |
-|      |       | suggestions | GET    | User Query             | List of User suggestions | Get a list of suggestion belonging to an user                     |
-|      |       | beloved     | GET    | User suggestion ID     | Confirmation message     | Get a list of beloveds selecting by an user                       |
-|      |       | beloved     | POST   | User Query             | List of User beloveds    | Add a new beloveds in an user profile                             |
-|      |       | matches     | GET    | User Query             | List of User Matches     | Get a list of user matches                                        |
-|      |       | matches     | DELETE | User suggestion ID     | Confirmation message     | Delete an user match                                              |
-|      |       | photos      | GET    | User Query             | List of User Photos      | Get a list of user photos                                         |
-|      |       | photos      | POST   | User photo URL         | List of User Photos      | Add a new photo in an user profile                                |
-|      |       | photos      | DELETE | User photo URL         | List of User Photos      | Delete a photo in an user profile                                 |
-|      |       | confirm     | GET    | User Confirmation Code | Confirmation message     | Get an user confirmation code in order to confirm a new user      |
+| Path | a     | s            | Method | Req                    | Res                      | Objective                                                         |
+| ---- | ----- | ------------ | ------ | ---------------------- | ------------------------ | ----------------------------------------------------------------- |
+| api  | auth  | login        | POST   | User Credential        | JWT Token                | Generate JWT Token in order to authenticate and allow user access |
+| api  | users | /            | GET    | User Query             | List of Users            | Get application user through mongodb query                        |
+|      |       | /            | POST   | User Object            | Confirmation message     | Create a new app user                                             |
+|      |       | /register    | POST   | User Object            | Confirmation message     | Register a new app user                                           |
+|      |       | /suggestions | GET    | User Query             | List of User suggestions | Get a list of suggestion belonging to an user                     |
+|      |       | /beloved     | GET    | User suggestion ID     | Confirmation message     | Get a list of beloveds selecting by an user                       |
+|      |       | /beloved     | POST   | User Query             | List of User beloveds    | Add a new beloveds in an user profile                             |
+|      |       | /matches     | GET    | User Query             | List of User Matches     | Get a list of user matches                                        |
+|      |       | /matches     | DELETE | User suggestion ID     | Confirmation message     | Delete an user match                                              |
+|      |       | /photos      | GET    | User Query             | List of User Photos      | Get a list of user photos                                         |
+|      |       | /photos      | POST   | User photo URL         | List of User Photos      | Add a new photo in an user profile                                |
+|      |       | /photos      | DELETE | User photo URL         | List of User Photos      | Delete a photo in an user profile                                 |
+|      |       | /confirm     | GET    | User Confirmation Code | Confirmation message     | Get an user confirmation code in order to confirm a new user      |
 
 ## Middlewares
 

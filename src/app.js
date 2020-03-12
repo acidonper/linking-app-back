@@ -5,6 +5,14 @@ const mongodbConn = require("./controllers/mongodb/connection");
 const indexRouter = require("./routes/index");
 const seeds = require("../seeds/index");
 const https = require("https");
+const cors = require("cors");
+
+var corsOptions = {
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 mongodbConn();
 seeds.createUsers();

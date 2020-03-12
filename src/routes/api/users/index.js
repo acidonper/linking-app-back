@@ -7,5 +7,6 @@ router.use("/beloveds", require("./beloveds"));
 router.use("/matches", require("./matches"));
 router.use("/photos", require("./photos"));
 router.use("/confirm", require("./confirm"));
+router.use("/register", require("./register"));
 
 module.exports = router;
