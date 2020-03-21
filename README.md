@@ -83,7 +83,7 @@ _User_ is a MongoDB Object which has a set of fields which define ir personal in
     -   travelCadence
     -   owlOrSkyLark
     -   sexualPreferences
-    -   ageRange
+    -   ageRangeL
 
 ### Matches
 

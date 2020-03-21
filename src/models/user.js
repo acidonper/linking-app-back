@@ -40,6 +40,9 @@ const userSchema = new Schema({
     confirmationCode: {
         type: String
     },
+    category: {
+        type: String
+    },
     chat: {
         id: {
             type: String
