@@ -41,7 +41,8 @@ const userSchema = new Schema({
         type: String
     },
     category: {
-        type: String
+        type: String,
+        required: [true, "role is required"]
     },
     chat: {
         id: {

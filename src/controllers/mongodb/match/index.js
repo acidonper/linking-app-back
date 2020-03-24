@@ -1,31 +1,54 @@
 const matchAlgorithm = require("./algorithm");
 const matchModel = require("../../../models/matches");
-
-// const userLib = require("../user/index");
 const userModel = require("../../../models/user");
 const check = require("check-types");
 
 module.exports = {
     searchSuggestions: async user => {
         try {
-            const usersSuggestions = matchModel
-                .find({
-                    user: user._id
-                })
+            if (check.emptyObject(user)) throw "Empty user object";
+            if (
+                !check.like(user, { username: "baz" }) &&
+                !check.like(user, { email: "baz" })
+            )
+                throw "Invalid user object";
+
+            const userSearch = userModel.findOne(user);
+            const userDefinition = await userSearch.exec();
+
+            const userSuggestionsSearch = matchModel
+                .findOne({ user: userDefinition._id })
+                .select({ suggestions: 1 })
                 .populate({
                     path: "suggestions",
                     model: "Users",
                     select: "-_id -name -lastname -email -role -__v"
                 });
 
-            const suggestions = await usersSuggestions.exec();
+            const userSuggestions = await userSuggestionsSearch.exec();
 
-            if (suggestions.length === 0) {
+            if (!userSuggestions) {
                 const calculatedSuggestion = await matchAlgorithm(user);
                 return calculatedSuggestion;
             }
 
-            return suggestions;
+            // const userBeloveds = matchModel
+            //     .findOne({ user: userDefinition._id })
+            //     .select({ beloved: 1 })
+            //     .populate({
+            //         path: "beloved",
+            //         model: "Users",
+            //         select: "-_id -name -lastname -email -role -__v"
+            //     });
+
+            // if (userBeloveds) {
+            //     if (userBeloveds.length > 0) {
+            //         const calculatedSuggestion = await matchAlgorithm(user);
+            //         return calculatedSuggestion;
+            //     }
+            // }
+
+            return userSuggestions.suggestions;
         } catch (error) {
             throw error;
         }
@@ -40,30 +63,8 @@ module.exports = {
             //     username: suggestionUsername
             // });
 
-            const getId = async search => {
-                try {
-                    if (check.emptyObject(search)) throw "Empty search object";
-                    if (
-                        !check.like(search, { username: "baz" }) &&
-                        !check.like(search, { email: "baz" })
-                    )
-                        throw "Invalid search object";
-
-                    const userSearched = userModel.find(search);
-                    const findAction = await userSearched.exec();
-
-                    if (findAction.length === 0) return false;
-                    if (findAction.length > 1)
-                        throw `User duplicated providing search: ${search}`;
-
-                    return findAction[0]._id;
-                } catch (error) {
-                    throw error;
-                }
-            };
-
-            const userID = await getId({ username: username });
-            const suggestionID = await getId({
+            const userID = await getIdLocal({ username: username });
+            const suggestionID = await getIdLocal({
                 username: suggestionUsername
             });
 
@@ -84,18 +85,20 @@ module.exports = {
             });
             const suggestionUserBeloveds = await suggestionUserSearchBeloved.exec();
 
-            if (suggestionUserBeloveds.beloved.includes(userID)) {
-                const userAddMatch = matchModel.findOneAndUpdate(
-                    { user: userID },
-                    { $addToSet: { matches: suggestionID } }
-                );
-                await userAddMatch.exec();
-                const suggestionUserAddMatch = matchModel.findOneAndUpdate(
-                    { user: suggestionID },
-                    { $addToSet: { matches: userID } }
-                );
-                await suggestionUserAddMatch.exec();
-                return "Added beloved and found a new match";
+            if (suggestionUserBeloveds) {
+                if (suggestionUserBeloveds.beloved.includes(userID)) {
+                    const userAddMatch = matchModel.findOneAndUpdate(
+                        { user: userID },
+                        { $addToSet: { matches: suggestionID } }
+                    );
+                    await userAddMatch.exec();
+                    const suggestionUserAddMatch = matchModel.findOneAndUpdate(
+                        { user: suggestionID },
+                        { $addToSet: { matches: userID } }
+                    );
+                    await suggestionUserAddMatch.exec();
+                    return "Added beloved and found a new match";
+                }
             }
             return "Added beloved";
         } catch (error) {
@@ -107,29 +110,7 @@ module.exports = {
             // Implement bidirectional functions call error
             // const userID = await userLib.getId({ username: username });
 
-            const getId = async search => {
-                try {
-                    if (check.emptyObject(search)) throw "Empty search object";
-                    if (
-                        !check.like(search, { username: "baz" }) &&
-                        !check.like(search, { email: "baz" })
-                    )
-                        throw "Invalid search object";
-
-                    const userSearched = userModel.find(search);
-                    const findAction = await userSearched.exec();
-
-                    if (findAction.length === 0) return false;
-                    if (findAction.length > 1)
-                        throw `User duplicated providing search: ${search}`;
-
-                    return findAction[0]._id;
-                } catch (error) {
-                    throw error;
-                }
-            };
-
-            const userID = await getId(user);
+            const userID = await getIdLocal(user);
             const userMatchesSearched = matchModel
                 .findOne({ user: userID })
                 .populate({
@@ -154,30 +135,8 @@ module.exports = {
             //     username: suggestionUsername
             // });
 
-            const getId = async search => {
-                try {
-                    if (check.emptyObject(search)) throw "Empty search object";
-                    if (
-                        !check.like(search, { username: "baz" }) &&
-                        !check.like(search, { email: "baz" })
-                    )
-                        throw "Invalid search object";
-
-                    const userSearched = userModel.find(search);
-                    const findAction = await userSearched.exec();
-
-                    if (findAction.length === 0) return false;
-                    if (findAction.length > 1)
-                        throw `User duplicated providing search: ${search}`;
-
-                    return findAction[0]._id;
-                } catch (error) {
-                    throw error;
-                }
-            };
-
-            const userID = await getId({ username: username });
-            const suggestionID = await getId({
+            const userID = await getIdLocal({ username: username });
+            const suggestionID = await getIdLocal({
                 username: suggestionUsername
             });
 
@@ -214,41 +173,42 @@ module.exports = {
             // Implement bidirectional functions call error
             // const userID = await userLib.getId({ username: username });
 
-            const getId = async search => {
-                try {
-                    if (check.emptyObject(search)) throw "Empty search object";
-                    if (
-                        !check.like(search, { username: "baz" }) &&
-                        !check.like(search, { email: "baz" })
-                    )
-                        throw "Invalid search object";
-
-                    const userSearched = userModel.find(search);
-                    const findAction = await userSearched.exec();
-
-                    if (findAction.length === 0) return false;
-                    if (findAction.length > 1)
-                        throw `User duplicated providing search: ${search}`;
-
-                    return findAction[0]._id;
-                } catch (error) {
-                    throw error;
-                }
-            };
-
-            const userID = await getId(user);
-            const userMatchessSearched = matchModel
+            const userID = await getIdLocal(user);
+            const userMatchesSearched = matchModel
                 .findOne({ user: userID })
+                .select({ matches: 1 })
                 .populate({
                     path: "matches",
                     model: "Users",
                     select: "-_id -name -lastname -email -role -__v"
                 });
-            const searchMatchesAction = await userMatchessSearched.exec();
+            const searchMatchesAction = await userMatchesSearched.exec();
 
-            return searchMatchesAction;
+            return searchMatchesAction.matches;
         } catch (error) {
             throw error;
         }
+    }
+};
+
+const getIdLocal = async search => {
+    try {
+        if (check.emptyObject(search)) throw "Empty search object";
+        if (
+            !check.like(search, { username: "baz" }) &&
+            !check.like(search, { email: "baz" })
+        )
+            throw "Invalid search object";
+
+        const userSearched = userModel.find(search);
+        const findAction = await userSearched.exec();
+
+        if (findAction.length === 0) return false;
+        if (findAction.length > 1)
+            throw `User duplicated providing search: ${search}`;
+
+        return findAction[0]._id;
+    } catch (error) {
+        throw error;
     }
 };

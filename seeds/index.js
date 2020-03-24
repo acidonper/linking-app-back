@@ -1,4 +1,5 @@
 const libUsers = require("../src/controllers/mongodb/user/index");
+const userCategorization = require("../src/controllers/mongodb/match/categorize");
 
 const createUsers = () => {
     const userList = [
@@ -22,7 +23,7 @@ const createUsers = () => {
                 physicalCondition: "curvy",
                 activity: "homeLover",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -52,19 +53,19 @@ const createUsers = () => {
             information: {
                 age: 19,
                 gender: "male",
-                education: "university",
+                education: "highSchool",
                 city: "Madrid",
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "studying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
                 sportCadence: "high",
-                travelCadence: "high",
-                owlOrSkyLark: "owl",
+                travelCadence: "low",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -89,8 +90,8 @@ const createUsers = () => {
                 gender: "male",
                 education: "university",
                 city: "Madrid",
-                physicalCondition: "curvy",
-                activity: "homeLover",
+                physicalCondition: "thin",
+                activity: "active",
                 lifeStyle: "working",
                 kidsLover: true,
                 petsLover: true
@@ -98,8 +99,8 @@ const createUsers = () => {
             preferences: {
                 culturalInterest: "high",
                 sportCadence: "low",
-                travelCadence: "low",
-                owlOrSkyLark: "owl",
+                travelCadence: "medium",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -127,7 +128,7 @@ const createUsers = () => {
                 physicalCondition: "thin",
                 activity: "active",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -163,7 +164,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
@@ -204,7 +205,7 @@ const createUsers = () => {
                 culturalInterest: "medium",
                 sportCadence: "medium",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -232,7 +233,7 @@ const createUsers = () => {
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "enjoying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -268,7 +269,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -337,7 +338,7 @@ const createUsers = () => {
                 physicalCondition: "curvy",
                 activity: "homeLover",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -373,7 +374,7 @@ const createUsers = () => {
                 activity: "energetic",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -1003,13 +1004,13 @@ const createUsers = () => {
                 activity: "active",
                 lifeStyle: "studying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
                 sportCadence: "low",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -1044,7 +1045,7 @@ const createUsers = () => {
                 culturalInterest: "low",
                 sportCadence: "high",
                 travelCadence: "low",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -1072,7 +1073,7 @@ const createUsers = () => {
                 physicalCondition: "thin",
                 activity: "active",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -1108,7 +1109,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
@@ -1149,7 +1150,7 @@ const createUsers = () => {
                 culturalInterest: "high",
                 sportCadence: "medium",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
                 ageRange: {
                     min: 18,
@@ -1177,7 +1178,7 @@ const createUsers = () => {
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -1213,7 +1214,7 @@ const createUsers = () => {
                 activity: "energetic",
                 lifeStyle: "enjoying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -1245,7 +1246,7 @@ const createUsers = () => {
                 education: "highSchool",
                 city: "Madrid",
                 physicalCondition: "curvy",
-                activity: "active",
+                activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
                 petsLover: true
@@ -1281,8 +1282,8 @@ const createUsers = () => {
                 city: "Madrid",
                 physicalCondition: "curvy",
                 activity: "active",
-                lifeStyle: "studying",
-                kidsLover: false,
+                lifeStyle: "homeLover",
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -1318,7 +1319,7 @@ const createUsers = () => {
                 activity: "active",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -1497,7 +1498,7 @@ const createUsers = () => {
             },
             preferences: {
                 culturalInterest: "medium",
-                sportCadence: "high",
+                sportCadence: "medium",
                 travelCadence: "medium",
                 owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
@@ -1882,7 +1883,7 @@ const createUsers = () => {
             },
             preferences: {
                 culturalInterest: "medium",
-                sportCadence: "low",
+                sportCadence: "high",
                 travelCadence: "medium",
                 owlOrSkyLark: "skylark",
                 sexualPreferences: "female",
@@ -1943,19 +1944,19 @@ const createUsers = () => {
             information: {
                 age: 19,
                 gender: "female",
-                education: "university",
+                education: "highSchool",
                 city: "Madrid",
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "studying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
                 sportCadence: "high",
-                travelCadence: "high",
-                owlOrSkyLark: "owl",
+                travelCadence: "medium",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -1988,9 +1989,9 @@ const createUsers = () => {
             },
             preferences: {
                 culturalInterest: "high",
-                sportCadence: "low",
-                travelCadence: "low",
-                owlOrSkyLark: "owl",
+                sportCadence: "medium",
+                travelCadence: "medium",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -2018,7 +2019,7 @@ const createUsers = () => {
                 physicalCondition: "thin",
                 activity: "active",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -2054,7 +2055,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
@@ -2095,7 +2096,7 @@ const createUsers = () => {
                 culturalInterest: "medium",
                 sportCadence: "medium",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -2123,7 +2124,7 @@ const createUsers = () => {
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "enjoying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -2159,7 +2160,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -2228,7 +2229,7 @@ const createUsers = () => {
                 physicalCondition: "curvy",
                 activity: "homeLover",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -2264,7 +2265,7 @@ const createUsers = () => {
                 activity: "energetic",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -2894,13 +2895,13 @@ const createUsers = () => {
                 activity: "active",
                 lifeStyle: "studying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
                 sportCadence: "low",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -2935,7 +2936,7 @@ const createUsers = () => {
                 culturalInterest: "low",
                 sportCadence: "high",
                 travelCadence: "low",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -2963,7 +2964,7 @@ const createUsers = () => {
                 physicalCondition: "thin",
                 activity: "active",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -2999,7 +3000,7 @@ const createUsers = () => {
                 activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "low",
@@ -3040,7 +3041,7 @@ const createUsers = () => {
                 culturalInterest: "high",
                 sportCadence: "medium",
                 travelCadence: "high",
-                owlOrSkyLark: "owl",
+                owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
                 ageRange: {
                     min: 18,
@@ -3068,7 +3069,7 @@ const createUsers = () => {
                 physicalCondition: "fitness",
                 activity: "energetic",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -3104,7 +3105,7 @@ const createUsers = () => {
                 activity: "energetic",
                 lifeStyle: "enjoying",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -3136,7 +3137,7 @@ const createUsers = () => {
                 education: "highSchool",
                 city: "Madrid",
                 physicalCondition: "curvy",
-                activity: "active",
+                activity: "homeLover",
                 lifeStyle: "working",
                 kidsLover: true,
                 petsLover: true
@@ -3171,9 +3172,9 @@ const createUsers = () => {
                 education: "university",
                 city: "Madrid",
                 physicalCondition: "curvy",
-                activity: "active",
+                activity: "homeLover",
                 lifeStyle: "studying",
-                kidsLover: false,
+                kidsLover: true,
                 petsLover: true
             },
             preferences: {
@@ -3209,7 +3210,7 @@ const createUsers = () => {
                 activity: "active",
                 lifeStyle: "working",
                 kidsLover: true,
-                petsLover: false
+                petsLover: true
             },
             preferences: {
                 culturalInterest: "medium",
@@ -3224,11 +3225,11 @@ const createUsers = () => {
             }
         },
         {
-            name: "victoria",
+            name: "Victoria",
             lastname: "Sanz",
-            username: "victoriaSanz",
-            password: "victoriaSanz",
-            email: "victoriaSanz@example.com",
+            username: "VictoriaSanz",
+            password: "VictoriaSanz",
+            email: "VictoriaSanz@example.com",
             role: "user",
             status: "active",
             photos: [
@@ -3388,7 +3389,7 @@ const createUsers = () => {
             },
             preferences: {
                 culturalInterest: "medium",
-                sportCadence: "high",
+                sportCadence: "low",
                 travelCadence: "medium",
                 owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
@@ -3773,7 +3774,7 @@ const createUsers = () => {
             },
             preferences: {
                 culturalInterest: "medium",
-                sportCadence: "low",
+                sportCadence: "high",
                 travelCadence: "medium",
                 owlOrSkyLark: "skylark",
                 sexualPreferences: "male",
@@ -3822,6 +3823,10 @@ const createUsers = () => {
 
     userList.map(async user => {
         try {
+            user.category = userCategorization(
+                user.information,
+                user.preferences
+            );
             await libUsers.new(user);
         } catch (error) {
             console.log("Creating seeds...");

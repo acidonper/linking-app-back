@@ -4,6 +4,7 @@ const photosLib = require("../../clouddinary/index");
 const check = require("check-types");
 const uuid = require("uuid/v1");
 const mailer = require("../../mail/index");
+const userCategorization = require("../match/categorize");
 
 module.exports = {
     new: async user => {
@@ -27,6 +28,11 @@ module.exports = {
 
             const pass = passLib.encrypt(password);
             user.password = pass;
+
+            user.category = userCategorization(
+                user.information,
+                user.preferences
+            );
 
             const newUser = new userModel(user, { autoIndex: false });
             await newUser.save();

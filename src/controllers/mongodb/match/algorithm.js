@@ -13,33 +13,20 @@ module.exports = async search => {
 
         const userSearch = userModel.findOne(search);
         const userDefinition = await userSearch.exec();
-        const { information, preferences } = userDefinition;
+        const { information, preferences, category } = userDefinition;
 
-        if (
-            information.education === "university" &&
-            preferences.culturalInterest === "low"
-        )
-            preferences.culturalInterest = "medium";
+        const userSuggestions = userModel.find({
+            "information.age": { $gte: preferences.ageRange.min },
+            "information.age": { $lte: preferences.ageRange.max },
+            "information.gender": preferences.sexualPreferences,
+            "information.city": information.city,
+            "information.kidsLover": information.kidsLover,
+            "information.petsLover": information.petsLover,
+            "preferences.owlOrSkyLark": preferences.owlOrSkyLark,
+            category: category
+        });
 
-        const usersSearch = userModel
-            .find({
-                "information.age": { $gte: preferences.ageRange.min }
-            })
-            .find({
-                "information.age": { $lte: preferences.ageRange.max }
-            })
-            .find({ "information.gender": preferences.sexualPreferences })
-            .find({ "information.city": information.city })
-            .find({ "information.kidsLover": information.kidsLover })
-            .find({ "information.PetsLover": information.PetsLover });
-        // .find({
-        //     "preference.culturalInterest": preferences.culturalInterest
-        // })
-        // .find({ "preference.sportCadence": preferences.sportCadence })
-        // .find({ "preference.travelCadence": preferences.travelCadence })
-        // .find({ "preference.owlOrSkyLark": preferences.owlOrSkyLark })
-
-        const users = await usersSearch.exec();
+        const users = await userSuggestions.exec();
 
         let usersIDs = [];
 
@@ -47,13 +34,30 @@ module.exports = async search => {
             usersIDs.push(user._id);
         });
 
-        const newSuggestions = new matchModel(
-            { user: userDefinition._id, suggestions: usersIDs },
-            { autoIndex: false }
-        );
-        const suggestions = await newSuggestions.save();
-
         const userSuggestionsSearch = matchModel
+            .findOne({
+                user: userDefinition._id
+            })
+            .select({ suggestions: 1 });
+        const userCurrentSuggestions = await userSuggestionsSearch.exec();
+
+        if (!userCurrentSuggestions) {
+            const newSuggestions = new matchModel(
+                { user: userDefinition._id, suggestions: usersIDs },
+                { autoIndex: false }
+            );
+            await newSuggestions.save();
+        } else {
+            const updateSuggestions = matchModel.findOneAndUpdate(
+                {
+                    user: userDefinition._id
+                },
+                { suggestions: usersIDs }
+            );
+            await updateSuggestions.exec();
+        }
+
+        const userNewSuggestionsSearch = matchModel
             .findOne({ user: userDefinition._id })
             .select({ suggestions: 1 })
             .populate({
@@ -61,7 +65,7 @@ module.exports = async search => {
                 model: "Users",
                 select: "-_id -name -lastname -email -role -__v"
             });
-        const searchBelovedAction = await userSuggestionsSearch.exec();
+        const searchBelovedAction = await userNewSuggestionsSearch.exec();
 
         return searchBelovedAction.suggestions;
     } catch (error) {

@@ -97,6 +97,8 @@ It is important to bear in ming that this models contains references to _User_ m
 -   Lovers
 -   Matches
 
+For more information about match algorithm, please visit [Match Algorithm](./doc/matchAlgorithm.md)
+
 ## Controllers
 
 _Controller_ folder is dedicated to implement app logic required for it to function properly.
@@ -119,7 +121,7 @@ There are implemented some express routes in order to expose required informatio
         -   / GET Query: \*ALL
         -   / POST Query: username/password
         -   suggestions (GET) Query: ID (username)
-        -   beloveds (POST) Query: ID (username) Params: suggestionID (sername suggestion loved)
+        -   beloveds (POST) Query: ID (username) Params: suggestionID (username suggestion loved)
 
 | Path | a     | s            | Method | Req                    | Res                      | Objective                                                         |
 | ---- | ----- | ------------ | ------ | ---------------------- | ------------------------ | ----------------------------------------------------------------- |
