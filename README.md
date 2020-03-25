@@ -138,6 +138,8 @@ There are implemented some express routes in order to expose required informatio
 |      |       | /photos      | POST   | User photo URL         | List of User Photos      | Add a new photo in an user profile                                |
 |      |       | /photos      | DELETE | User photo URL         | List of User Photos      | Delete a photo in an user profile                                 |
 |      |       | /confirm     | GET    | User Confirmation Code | Confirmation message     | Get an user confirmation code in order to confirm a new user      |
+|      |       | /profile     | GET    | User Query             | User Profile settings    | Get user profile information                                      |
+|      |       | /profile     | POST   | User Query             | Confirmation message     | Update user profile information                                   |
 
 ## Middlewares
 

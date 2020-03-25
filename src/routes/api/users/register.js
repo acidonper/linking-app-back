@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const isAdmin = require("../../../middlewares/isAdmin");
 const userLib = require("../../../controllers/mongodb/user/index");
 
 router.post("/", async (req, res) => {

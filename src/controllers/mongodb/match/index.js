@@ -25,30 +25,44 @@ module.exports = {
                     select: "-_id -name -lastname -email -role -__v"
                 });
 
-            const userSuggestions = await userSuggestionsSearch.exec();
+            let userSuggestions = await userSuggestionsSearch.exec();
 
             if (!userSuggestions) {
-                const calculatedSuggestion = await matchAlgorithm(user);
-                return calculatedSuggestion;
+                userSuggestions = await matchAlgorithm(user);
+                // const calculatedSuggestion = await matchAlgorithm(user);
+                // return calculatedSuggestion;
             }
+            // return userSuggestions.suggestions;
 
-            // const userBeloveds = matchModel
-            //     .findOne({ user: userDefinition._id })
-            //     .select({ beloved: 1 })
-            //     .populate({
-            //         path: "beloved",
-            //         model: "Users",
-            //         select: "-_id -name -lastname -email -role -__v"
-            //     });
+            const userMatchesSearched = matchModel
+                .findOne({ user: userDefinition._id })
+                .select({ beloved: 1 })
+                .populate({
+                    path: "beloved",
+                    model: "Users",
+                    select: "-_id -name -lastname -email -role -__v"
+                });
+            const userBeloved = await userMatchesSearched.exec();
 
-            // if (userBeloveds) {
-            //     if (userBeloveds.length > 0) {
-            //         const calculatedSuggestion = await matchAlgorithm(user);
-            //         return calculatedSuggestion;
-            //     }
-            // }
+            const uniqueBelovedUsernames = userBeloved.beloved.reduce(
+                (newArray, item) => {
+                    return [...newArray, item.username];
+                },
+                []
+            );
 
-            return userSuggestions.suggestions;
+            const uniqueSuggestions = userSuggestions.suggestions.reduce(
+                (newArray, item) => {
+                    if (uniqueBelovedUsernames.includes(item.username)) {
+                        return newArray;
+                    } else {
+                        return [...newArray, item];
+                    }
+                },
+                []
+            );
+
+            return uniqueSuggestions;
         } catch (error) {
             throw error;
         }

@@ -8,5 +8,6 @@ router.use("/matches", require("./matches"));
 router.use("/photos", require("./photos"));
 router.use("/confirm", require("./confirm"));
 router.use("/register", require("./register"));
+router.use("/profile", require("./profile"));
 
 module.exports = router;

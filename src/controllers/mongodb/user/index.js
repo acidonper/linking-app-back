@@ -5,6 +5,7 @@ const check = require("check-types");
 const uuid = require("uuid/v1");
 const mailer = require("../../mail/index");
 const userCategorization = require("../match/categorize");
+const matchAlgorithm = require("../match/algorithm");
 
 module.exports = {
     new: async user => {
@@ -82,6 +83,32 @@ module.exports = {
             throw error;
         }
     },
+    update: async (user, changes) => {
+        try {
+            let newUserSettings = changes;
+
+            if (changes.password) {
+                const pass = passLib.encrypt(changes.password);
+                newUserSettings.password = pass;
+            }
+            newUserSettings.category = userCategorization(
+                changes.information,
+                changes.preferences
+            );
+            delete newUserSettings.username;
+
+            const userModifySettings = userModel.findOneAndUpdate(
+                { username: user },
+                newUserSettings
+            );
+            await userModifySettings.exec();
+            await matchAlgorithm({ username: user });
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    },
     getId: async search => {
         try {
             if (check.emptyObject(search)) throw "Empty search object";
@@ -118,6 +145,24 @@ module.exports = {
             search.role = "user";
             const usersSearched = userModel
                 .find(search)
+                .select("-password -role -__v -_id");
+            const findAction = await usersSearched.exec();
+            return findAction;
+        } catch (error) {
+            throw error;
+        }
+    },
+    searchUserProfile: async search => {
+        try {
+            if (check.emptyObject(search)) throw "Empty search object";
+            if (
+                !check.like(search, { username: "baz" }) &&
+                !check.like(search, { email: "baz" })
+            )
+                throw "Invalid search object";
+
+            const usersSearched = userModel
+                .findOne(search)
                 .select("-password -role -__v -_id");
             const findAction = await usersSearched.exec();
             return findAction;
