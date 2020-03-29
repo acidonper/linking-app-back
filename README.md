@@ -145,10 +145,30 @@ There are implemented some express routes in order to expose required informatio
 
 In this sections, every routes' authentication or authorization function are included.
 
-## Testing
+## Available Scripts
+
+In the project directory, it is possible to execute the following scripts:
+
+### `npm start`
+
+Runs the app.js file in order to run the application in both development adn production mode. It is important to bear in mind that nodeJS is execution engine:
+
+```
+"start": "node src/app.js"
+```
+
+### `npm test`
+
+Runs the test files, included below, in order to run the application test.
 
 -   `*`.spec.js -> Unity Test
 -   `*`.test.js -> Integration Test
+
+It is important to bear in mind that testing in this repository is implemented by Mocha, Jest and mongo-mock.
+
+```
+"test": "mocha --timeout 10000 --recursive --exit"
+```
 
 ## License
 
