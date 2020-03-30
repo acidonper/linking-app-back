@@ -4,7 +4,6 @@ const app = express();
 const mongodbConn = require("./controllers/mongodb/connection");
 const indexRouter = require("./routes/index");
 const seeds = require("../seeds/index");
-const https = require("https");
 const cors = require("cors");
 
 var corsOptions = {
@@ -18,8 +17,8 @@ mongodbConn();
 seeds.createUsers();
 
 require("../src/controllers/auth/passport/index")(app);
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ limit: "5mb", extended: true }));
 
 app.use("/", indexRouter);
 

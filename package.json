@@ -18,6 +18,7 @@
     },
     "homepage": "https://github.com/acidonper/linking-app-back#readme",
     "dependencies": {
+        "axios": "^0.19.2",
         "bcrypt": "^3.0.7",
         "chai": "^4.2.0",
         "check-types": "^11.1.1",

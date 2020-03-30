@@ -1,0 +1,24 @@
+const axios = require("axios");
+
+module.exports = {
+    uploadPhoto: async (user, photo) => {
+        try {
+            const storageUser = process.env.LINKING_APP_IMAGES_USER;
+            const storagePass = process.env.LINKING_APP_IMAGES_PASS;
+            const storageService = process.env.LINKING_APP_IMAGES_SERVICE;
+
+            const data = {
+                username: storageUser,
+                password: storagePass,
+                id: user,
+                photo: photo
+            };
+
+            const uploadPhoto = await axios.post(storageService, data);
+
+            return uploadPhoto.data.photo;
+        } catch (error) {
+            throw "Image upload not found";
+        }
+    }
+};

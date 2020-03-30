@@ -107,6 +107,7 @@ _Controller_ folder is dedicated to implement app logic required for it to funct
 | ----------- | ---------------------------------------------------------------------------------------- |
 | auth        | Authentication functions (Password generation, JWT implementation, login functions, etc) |
 | clouddinary | Photo management related functions                                                       |
+| storage     | Linking App Image Repository management related functions                                |
 | mail        | Confirmation mail service functions                                                      |
 | mongodb     | MongoDB models implementation and management functions (User and Matches administration) |
 

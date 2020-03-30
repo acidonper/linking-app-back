@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { isAuthenticated } = require("../../../middlewares/passport/index");
 const userLib = require("../../../controllers/mongodb/user/index");
+const fs = require("fs");
 
 router.get("/", isAuthenticated, async (req, res) => {
     try {
@@ -32,7 +33,12 @@ router.post("/", isAuthenticated, async (req, res) => {
                 message: { error: "Bad parameters" }
             });
         const user = { username: id };
-        await userLib.addPhoto(user, photo);
+
+        // DELETING WHEN FRONT
+        const imageData = await fs.readFileSync(process.cwd() + "/image.png");
+        const imageString = Buffer.from(imageData).toString("base64");
+
+        await userLib.addPhoto(user, imageString);
         const userPhotos = await userLib.searchUserPhotos(user);
         res.status(200).json({
             userPhotos: userPhotos

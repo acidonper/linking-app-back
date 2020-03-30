@@ -1,6 +1,7 @@
 const userModel = require("../../../models/user");
 const passLib = require("../../auth/password/index");
-const photosLib = require("../../clouddinary/index");
+// const photosLib = require("../../clouddinary/index");
+const storageLib = require("../../storage/index");
 const check = require("check-types");
 const uuid = require("uuid/v1");
 const mailer = require("../../mail/index");
@@ -195,9 +196,15 @@ module.exports = {
             )
                 throw "Invalid user object";
 
-            const newPhoto = await photosLib.uploadPhoto(user.username, photo);
+            // clouddinary integration
+            // const newPhoto = await photosLib.uploadPhoto(user.username, photo);
+            // const userAddPhoto = userModel.findOneAndUpdate(user, {
+            //     $addToSet: { photos: newPhoto.secure_url }
+            // });
+
+            const newPhoto = await storageLib.uploadPhoto(user.username, photo);
             const userAddPhoto = userModel.findOneAndUpdate(user, {
-                $addToSet: { photos: newPhoto.secure_url }
+                $addToSet: { photos: newPhoto }
             });
             await userAddPhoto.exec();
 
