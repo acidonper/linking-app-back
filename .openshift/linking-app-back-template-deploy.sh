@@ -11,8 +11,7 @@
 usage() {
 echo "Usage: $0 <project_name> <git_user> <git_password> <images_user> <images_password> <jwt_secret> <nodemailer_password>"
 echo "Example:"
-echo "   sh linking-app-back-template-deploy.sh linking-app linkingappspain pass123 adminimages pass123 secret123 pass123 "
-echo "  ./spotify_full_template.sh linking-app admin h3ll0123?"
+echo "   sh linking-app-back-template-deploy.sh linking-app linkingappspain pass123 adminimages pass123 secret123 pass123"
 exit 1
 }
 
@@ -22,6 +21,7 @@ exit 1
 PROJECT_NAME=$1
 MONGODB_DATABASE="linking"
 SERVICE_NAME="linking-app-back"
+APP_SERVICE_CORS="https://linking-app-front-pepe.apps-crc.testing/"
 SERVICE_GIT_URL="https://github.com/acidonper/linking-app-back.git"
 SERVICE_GIT_USER=$2
 SERVICE_GIT_PASSWORD=$3
@@ -43,6 +43,7 @@ oc process -f linking-app-back-template.yaml  \
 -p NAMESPACE=$PROJECT_NAME \
 -p MONGODB_DATABASE=$MONGODB_DATABASE \
 -p SERVICE_NAME=$SERVICE_NAME  \
+-p APP_SERVICE_CORS=$APP_SERVICE_CORS \
 -p SERVICE_GIT_URL=$SERVICE_GIT_URL \
 -p SERVICE_GIT_USER=$SERVICE_GIT_USER  \
 -p SERVICE_GIT_PASSWORD=$SERVICE_GIT_PASSWORD \
@@ -56,7 +57,7 @@ oc process -f linking-app-back-template.yaml  \
 -p URL_CONFIRM_NODEMAILER=$URL_CONFIRM_NODEMAILER \
 -p CONFIRMATION_NODEMAILER=$CONFIRMATION_NODEMAILER \
 -p JWT_SECRET=$JWT_SECRET \
--p JWT_EXPIRES=$JWT_EXPIRES  | oc create -f - -n $PROJECT_NAME
+-p JWT_EXPIRES=$JWT_EXPIRES  | oc apply -f - -n $PROJECT_NAME
 
 
 # Wait for mongodb

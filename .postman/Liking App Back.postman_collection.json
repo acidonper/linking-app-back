@@ -1,0 +1,672 @@
+{
+	"info": {
+		"_postman_id": "6560922a-4315-4946-990f-953e088ed8ca",
+		"name": "Liking App Back",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "/api/auth/login user01",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user01",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/auth/logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/auth/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/user/test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/user/test",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"user",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/auth/login admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "test02",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test011234567890./*01",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI4NGRkM2QwYzBkOTVjMDk0NTcxZGMiLCJleHAiOjE1Nzk3MDAzNzgyMTIsInVzZXJuYW1lIjoidXNlcjAxIn0.5ib9DukMh9UZfK689b1t2-L023jpBnXJSmih7mGjDjk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/suggestions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1Nzk4MDM2ODIyMzcsInVzZXJuYW1lIjoidXNlcjAxIn0.XWh4uOv3psc5lGJFvoxFGO3YvMIql0tcowxsy3W4OPU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/users/suggestions?id=user02",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user02"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/suggestions Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1Nzk4MDM2ODIyMzcsInVzZXJuYW1lIjoidXNlcjAxIn0.XWh4uOv3psc5lGJFvoxFGO3YvMIql0tcowxsy3W4OPU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/users/beloveds/?id=user02",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"beloveds",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user02"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/matches/?id=user01 Search Matches",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1ODAwNDY1MzQyNjQsInVzZXJuYW1lIjoidXNlcjAxIn0.p5Rkn_r6KfcSscV8B3_uw4ApA0FclCvN-N2cDwcnsmk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/users/matches/?id=user01",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"matches",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTMiLCJleHAiOjE1ODAwNTU5MzA4NzcsInVzZXJuYW1lIjoiYWRtaW51c2VyMDEifQ.wqWjXVv6gUV4Ln7H-qCxrcHARgVSfRkjnSA04UcI_1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"name\": \"Post\",\n   \"lastname\": \"Man\",\n   \"username\": \"postman\",\n   \"password\": \"postman\",\n   \"email\": \"postman@example.com\",\n   \"role\": \"user\",\n   \"information\": {\n      \"age\": 18,\n      \"gender\": \"male\",\n      \"education\": \"university\",\n      \"city\": \"Madrid\",\n      \"physicalCondition\": \"curvy\",\n      \"activity\": \"homeLover\",\n      \"lifeStyle\": \"studying\",\n      \"kidsLover\": false,\n      \"petsLover\": true\n   },\n   \"preferences\": {\n      \"culturalInterest\": \"medium\",\n      \"sportCadence\": \"low\",\n      \"travelCadence\": \"high\",\n      \"owlOrSkyLark\": \"skylark\",\n      \"sexualPreferences\": \"both\",\n      \"ageRange\": {\n         \"min\": 18,\n         \"max\": 80\n      }\n   }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users register user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"name\": \"Post\",\n   \"lastname\": \"Man\",\n   \"username\": \"postman\",\n   \"password\": \"postman\",\n   \"email\": \"postman@example.com\",\n   \"role\": \"user\",\n   \"information\": {\n      \"age\": 18,\n      \"gender\": \"male\",\n      \"education\": \"university\",\n      \"city\": \"Madrid\",\n      \"physicalCondition\": \"curvy\",\n      \"activity\": \"homeLover\",\n      \"lifeStyle\": \"studying\",\n      \"kidsLover\": false,\n      \"petsLover\": true\n   },\n   \"preferences\": {\n      \"culturalInterest\": \"medium\",\n      \"sportCadence\": \"low\",\n      \"travelCadence\": \"high\",\n      \"owlOrSkyLark\": \"skylark\",\n      \"sexualPreferences\": \"both\",\n      \"ageRange\": {\n         \"min\": 18,\n         \"max\": 80\n      }\n   }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/register",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/matches/?id=user01 Delete Match",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1ODAwNDY1MzQyNjQsInVzZXJuYW1lIjoidXNlcjAxIn0.p5Rkn_r6KfcSscV8B3_uw4ApA0FclCvN-N2cDwcnsmk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "suggestionID",
+									"value": "user05",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/matches/?id=user01",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"matches",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/suggestions Search beloveds",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1Nzk4MDg4MjY0NjQsInVzZXJuYW1lIjoidXNlcjAxIn0.4QvwQH2YAKyeE9Y--V18pV2YGR2JVmPfTRKrcCRZO2Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "suggestionID",
+									"value": "user01",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/beloveds/?id=user01",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"beloveds",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/suggestions Added boleveds",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1Nzk4MDg4MjY0NjQsInVzZXJuYW1lIjoidXNlcjAxIn0.4QvwQH2YAKyeE9Y--V18pV2YGR2JVmPfTRKrcCRZO2Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "suggestionID",
+									"value": "user02",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/beloveds/?id=user01",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"beloveds",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "user01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/photos Search photos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTI5YTY1YjBkMmFmNjcyZGE0NmNmYTQiLCJleHAiOjE1ODAwNTc2ODMzNDksInVzZXJuYW1lIjoidXNlcjAxIn0.2m7nfRjku7_PcX4k4QYdih9H40DR2NM9-VAERfK3Mng",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/api/users/photos",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/photos Delete photos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTJkYjVjYWRjOWRhMDM0YjQ3OTEzNzMiLCJleHAiOjE1ODAxMTExMDA2MjIsInVzZXJuYW1lIjoidXNlcjEzIn0.6t0d6C8ppn-ZEEWUUCkQfs9ryNm6KL26Qb9Ec1XjypE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "photo",
+									"value": "laquemedalagana",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/photos",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:5000/api/users/photos Save photos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1ZTJkYjVjYWRjOWRhMDM0YjQ3OTEzNzMiLCJleHAiOjE1ODAxMTExMDA2MjIsInVzZXJuYW1lIjoidXNlcjEzIn0.6t0d6C8ppn-ZEEWUUCkQfs9ryNm6KL26Qb9Ec1XjypE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "photo",
+									"value": "laquemedalagana",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:5000/api/users/photos",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "http://localhost:5000/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

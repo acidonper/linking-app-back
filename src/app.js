@@ -7,7 +7,7 @@ const seeds = require("../seeds/index");
 const cors = require("cors");
 
 var corsOptions = {
-    origin: "http://localhost:3000",
+    origin: process.env.APP_SERVICE_CORS,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

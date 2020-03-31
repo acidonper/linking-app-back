@@ -35,6 +35,7 @@ A set of variables have to be defined in **.env** file in order to run the appli
 | Variable                | Objective                                                                                      |
 | ----------------------- | ---------------------------------------------------------------------------------------------- |
 | APP_SERVICE_PORT        | Express Server Listen Port                                                                     |
+| APP_SERVICE_CORS        | CORS App Domain                                                                                |
 | MONGODB_PORT            | MongoDB Server Listen Port                                                                     |
 | MONGODB_HOST            | MongoDB Server Hostname                                                                        |
 | MONGODB_DATABASE        | MongoDB Database Name                                                                          |

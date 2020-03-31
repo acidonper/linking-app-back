@@ -197,6 +197,7 @@ objects:
           database-name: ${MONGODB_DATABASE}
           database-password: ${MONGODB_PASSWORD}
           database-user: ${MONGODB_USER}
+          app-service-cors: ${APP_SERVICE_CORS}
           image-user: ${IMAGE_USER}
           image-password: ${IMAGE_PASSWORD}
           image-service: ${IMAGE_SERVICE}
@@ -291,6 +292,11 @@ objects:
                               valueFrom:
                                   secretKeyRef:
                                       key: database-name
+                                      name: ${SERVICE_NAME}
+                            - name: APP_SERVICE_CORS
+                              valueFrom:
+                                  secretKeyRef:
+                                      key: app-service-cors
                                       name: ${SERVICE_NAME}
                             - name: IMAGE_PASSWORD
                               valueFrom:
@@ -426,6 +432,10 @@ parameters:
     - description: Name of the service NODEJS
       displayName: NODEJS Service Name
       name: SERVICE_NAME
+      required: true
+    - description: URL of Linking App
+      displayName: APP_SERVICE_CORS
+      name: APP_SERVICE_CORS
       required: true
     - description: Name of the service NODEJS
       displayName: NODEJS Service Name
