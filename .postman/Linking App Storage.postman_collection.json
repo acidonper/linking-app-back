@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "faa2f145-12e1-42be-8161-bc922129ade9",
+		"name": "Linking App Storage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:5001/photos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "adminuser01",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "das213@#42340idsf2134!@#aasdASD",
+							"type": "text"
+						},
+						{
+							"key": "id",
+							"value": "pepe",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"value": "SE9MQUFBQUFBQUFBQUFhCg==",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5001/photos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"photos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5001/health",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "adminuser01",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "das213@#42340idsf2134!@#aasdASD",
+							"type": "text"
+						},
+						{
+							"key": "id",
+							"value": "pepe",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"value": "SE9MQUFBQUFBQUFBQUFhCg==",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5001/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5001/photos Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "adminuser01",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "das213@#42340idsf2134!@#aasdASD",
+							"type": "text"
+						},
+						{
+							"key": "id",
+							"value": "pepe",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"value": "http://localhost:5000/public/pepe-1585508948.png",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5001/photos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"photos"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

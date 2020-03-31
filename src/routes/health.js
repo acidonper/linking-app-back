@@ -1,8 +1,8 @@
 const Express = require("express");
 const router = Express.Router();
 
-router.use("/api", require("./api"));
-
-router.use("/health", require("./health"));
+router.get("/", async (req, res) => {
+    res.status(200).json({ message: "health OK!" });
+});
 
 module.exports = router;

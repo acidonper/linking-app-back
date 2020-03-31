@@ -34,10 +34,15 @@ A set of variables have to be defined in **.env** file in order to run the appli
 
 | Variable                | Objective                                                                                      |
 | ----------------------- | ---------------------------------------------------------------------------------------------- |
-| SERVER_PORT             | Express Server Listen Port                                                                     |
-| MONGO_PORT              | MongoDB Server Listen Port                                                                     |
-| MONGO_HOST              | MongoDB Server Hostname with credential (Example: "`<user>:<password>`@mongodb")               |
-| MONGO_DB                | MongoDB Database Name                                                                          |
+| APP_SERVICE_PORT        | Express Server Listen Port                                                                     |
+| MONGODB_PORT            | MongoDB Server Listen Port                                                                     |
+| MONGODB_HOST            | MongoDB Server Hostname                                                                        |
+| MONGODB_DATABASE        | MongoDB Database Name                                                                          |
+| MONGODB_USER            | MongoDB Database Admin Username (EMPTY to unsecured login)                                     |
+| MONGODB_PASSWORD        | MongoDB Database Admin User password (EMPTY to unsecured login)                                |
+| IMAGE_SERVICE           | Linking App Images service                                                                     |
+| IMAGE_USER              | Linking App Images Admin Username                                                              |
+| IMAGES_PASSWORD         | Linking App Images Admin User Password                                                         |
 | JWT_SECRET              | JSON Web Token Secret                                                                          |
 | JWT_EXPIRES             | JSON Web Tokens expiration time                                                                |
 | APP_ADMIN_NAME          | User Admin Name                                                                                |
