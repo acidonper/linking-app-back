@@ -7,15 +7,17 @@ const fs = require("fs");
 router.get("/", isAuthenticated, async (req, res) => {
     try {
         const id = req.user.username;
-        if (!id)
+        if (!id) {
             res.status(400).json({
                 message: { error: "Bad parameters" }
             });
-        const query = { username: id };
-        const userPhotos = await userLib.searchUserPhotos(query);
-        res.status(200).json({
-            userPhotos: userPhotos
-        });
+        } else {
+            const query = { username: id };
+            const userPhotos = await userLib.searchUserPhotos(query);
+            res.status(200).json({
+                userPhotos: userPhotos
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -28,21 +30,29 @@ router.post("/", isAuthenticated, async (req, res) => {
     try {
         const id = req.user.username;
         const { photo } = req.body;
-        if (!id || !photo)
+        if (!id || !photo) {
             res.status(400).json({
                 message: { error: "Bad parameters" }
             });
-        const user = { username: id };
+        } else {
+            const user = { username: id };
 
-        // DELETING WHEN FRONT
-        const imageData = await fs.readFileSync(process.cwd() + "/image.png");
-        const imageString = Buffer.from(imageData).toString("base64");
+            // DELETING WHEN FRONT
+            // const imageData = await fs.readFileSync(
+            //     process.cwd() + "/image.png"
+            // );
 
-        await userLib.addPhoto(user, imageString);
-        const userPhotos = await userLib.searchUserPhotos(user);
-        res.status(200).json({
-            userPhotos: userPhotos
-        });
+            console.log(req.body);
+
+            const imageData = photo;
+            const imageString = Buffer.from(imageData).toString("base64");
+
+            await userLib.addPhoto(user, imageString);
+            const userPhotos = await userLib.searchUserPhotos(user);
+            res.status(200).json({
+                userPhotos: userPhotos
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -55,16 +65,18 @@ router.delete("/", isAuthenticated, async (req, res) => {
     try {
         const id = req.user.username;
         const { photo } = req.body;
-        if (!id || !photo)
+        if (!id || !photo) {
             res.status(400).json({
                 message: { error: "Bad parameters" }
             });
-        const user = { username: id };
-        await userLib.deletePhoto(user, photo);
-        const userPhotos = await userLib.searchUserPhotos(user);
-        res.status(200).json({
-            userPhotos: userPhotos
-        });
+        } else {
+            const user = { username: id };
+            await userLib.deletePhoto(user, photo);
+            const userPhotos = await userLib.searchUserPhotos(user);
+            res.status(200).json({
+                userPhotos: userPhotos
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
