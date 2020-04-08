@@ -18,6 +18,7 @@ module.exports = {
 
       return uploadPhoto.data.photo;
     } catch (error) {
+      console.log(error);
       throw "Image upload not found";
     }
   },

@@ -1,504 +1,532 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-    annotations:
-        description: ${SERVICE_NAME} (NODEJS App + MongoDB)
-    name: ${SERVICE_NAME}
-    namespace: ${NAMESPACE}
+  annotations:
+    description: ${SERVICE_NAME} (NODEJS App + MongoDB)
+  name: ${SERVICE_NAME}
+  namespace: ${NAMESPACE}
 objects:
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-          annotations:
-              template.openshift.io/expose-admin_password: "{.data['database-admin-password']}"
-              template.openshift.io/expose-database_name: "{.data['database-name']}"
-              template.openshift.io/expose-password: "{.data['database-password']}"
-              template.openshift.io/expose-username: "{.data['database-user']}"
-          name: ${DATABASE_SERVICE_NAME}
-      stringData:
-          database-admin-password: ${MONGODB_ADMIN_PASSWORD}
-          database-name: ${MONGODB_DATABASE}
-          database-password: ${MONGODB_PASSWORD}
-          database-user: ${MONGODB_USER}
-    - apiVersion: v1
-      kind: Service
-      metadata:
-          annotations:
-              template.openshift.io/expose-uri: mongodb://{.spec.clusterIP}:{.spec.ports[?(.name=="mongo")].port}
-          name: ${DATABASE_SERVICE_NAME}
-          namespace: ${NAMESPACE}
-      spec:
-          ports:
-              - name: mongo
-                nodePort: 0
-                port: 27017
-                protocol: TCP
-                targetPort: 27017
-          selector:
-              name: ${DATABASE_SERVICE_NAME}
-          sessionAffinity: None
-          type: ClusterIP
-      status:
-          loadBalancer: {}
-    - apiVersion: v1
-      kind: DeploymentConfig
-      metadata:
-          annotations:
-              template.alpha.openshift.io/wait-for-ready: "true"
-          name: ${DATABASE_SERVICE_NAME}
-          namespace: ${NAMESPACE}
-      spec:
-          replicas: 1
-          selector:
-              name: ${DATABASE_SERVICE_NAME}
-          strategy:
-              type: Recreate
-          template:
-              metadata:
-                  labels:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      annotations:
+        template.openshift.io/expose-admin_password: "{.data['database-admin-password']}"
+        template.openshift.io/expose-database_name: "{.data['database-name']}"
+        template.openshift.io/expose-password: "{.data['database-password']}"
+        template.openshift.io/expose-username: "{.data['database-user']}"
+      name: ${DATABASE_SERVICE_NAME}
+    stringData:
+      database-admin-password: ${MONGODB_ADMIN_PASSWORD}
+      database-name: ${MONGODB_DATABASE}
+      database-password: ${MONGODB_PASSWORD}
+      database-user: ${MONGODB_USER}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        template.openshift.io/expose-uri: mongodb://{.spec.clusterIP}:{.spec.ports[?(.name=="mongo")].port}
+      name: ${DATABASE_SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      ports:
+        - name: mongo
+          nodePort: 0
+          port: 27017
+          protocol: TCP
+          targetPort: 27017
+      selector:
+        name: ${DATABASE_SERVICE_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: "true"
+      name: ${DATABASE_SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      replicas: 1
+      selector:
+        name: ${DATABASE_SERVICE_NAME}
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            name: ${DATABASE_SERVICE_NAME}
+        spec:
+          containers:
+            - capabilities: {}
+              env:
+                - name: MONGODB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
                       name: ${DATABASE_SERVICE_NAME}
-              spec:
-                  containers:
-                      - capabilities: {}
-                        env:
-                            - name: MONGODB_USER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-user
-                                      name: ${DATABASE_SERVICE_NAME}
-                            - name: MONGODB_PASSWORD
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-password
-                                      name: ${DATABASE_SERVICE_NAME}
-                            - name: MONGODB_ADMIN_PASSWORD
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-admin-password
-                                      name: ${DATABASE_SERVICE_NAME}
-                            - name: MONGODB_DATABASE
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-name
-                                      name: ${DATABASE_SERVICE_NAME}
-                        image: " "
-                        imagePullPolicy: IfNotPresent
-                        livenessProbe:
-                            initialDelaySeconds: 30
-                            tcpSocket:
-                                port: 27017
-                            timeoutSeconds: 1
-                        name: mongodb
-                        ports:
-                            - containerPort: 27017
-                              protocol: TCP
-                        readinessProbe:
-                            exec:
-                                command:
-                                    - /bin/sh
-                                    - -i
-                                    - -c
-                                    - mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD
-                                      --eval="quit()"
-                            initialDelaySeconds: 3
-                            timeoutSeconds: 1
-                        resources:
-                            limits:
-                                memory: ${MEMORY_LIMIT}
-                        securityContext:
-                            capabilities: {}
-                            privileged: false
-                        terminationMessagePath: /dev/termination-log
-                        volumeMounts:
-                            - mountPath: /var/lib/mongodb/data
-                              name: ${DATABASE_SERVICE_NAME}-data
-                  dnsPolicy: ClusterFirst
-                  restartPolicy: Always
-                  volumes:
-                      - emptyDir:
-                            medium: ""
-                        name: ${DATABASE_SERVICE_NAME}-data
-          triggers:
-              - imageChangeParams:
-                    automatic: true
-                    containerNames:
-                        - mongodb
-                    from:
-                        kind: ImageStreamTag
-                        name: mongodb:${MONGODB_VERSION}
-                        namespace: ${MONGO_IS_NAMESPACE}
-                    lastTriggeredImage: ""
-                type: ImageChange
-              - type: ConfigChange
-      status: {}
-    - apiVersion: v1
-      kind: ImageStream
-      metadata:
-          annotations:
-              description: Keeps track of changes in the application image
-          name: ${SERVICE_NAME}
-          namespace: ${NAMESPACE}
-    - apiVersion: v1
-      kind: BuildConfig
-      metadata:
-          name: ${SERVICE_NAME}
-          namespace: ${NAMESPACE}
-      spec:
-          output:
-              to:
-                  kind: ImageStreamTag
-                  name: ${SERVICE_NAME}:latest
-          source:
-              contextDir: /
-              git:
-                  ref: master
-                  uri: ${SERVICE_GIT_URL}
-              type: Git
-              sourceSecret:
-                  name: ${SERVICE_NAME}-git
-          strategy:
-              sourceStrategy:
-                  env:
-                      - name: GIT_SSL_NO_VERIFY
-                        value: "true"
-                      - name: NODE_TLS_REJECT_UNAUTHORIZED
-                        value: "0"
-                  from:
-                      kind: ImageStreamTag
-                      name: ${NODEJS_IMAGE}
-                      namespace: openshift
-              type: Source
-    - apiVersion: v1
-      kind: Service
-      metadata:
-          name: ${SERVICE_NAME}
-          namespace: ${NAMESPACE}
-      spec:
-          ports:
-              - name: ${SERVICE_NAME}-http
-                port: 5000
-                protocol: TCP
-                targetPort: 5000
-          selector:
-              deploymentconfig: ${SERVICE_NAME}
-          sessionAffinity: None
-          type: ClusterIP
-      status:
-          loadBalancer: {}
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-          name: ${SERVICE_NAME}
-          namespace: ${NAMESPACE}
-      stringData:
-          database-service-name: ${DATABASE_SERVICE_NAME}
-          database-port: ${MONGODB_PORT}
-          database-admin-password: ${MONGODB_ADMIN_PASSWORD}
-          database-name: ${MONGODB_DATABASE}
-          database-password: ${MONGODB_PASSWORD}
-          database-user: ${MONGODB_USER}
-          app-service-cors: ${APP_SERVICE_CORS}
-          image-user: ${IMAGE_USER}
-          image-password: ${IMAGE_PASSWORD}
-          image-service: ${IMAGE_SERVICE}
-          user-nodemailer: ${USER_NODEMAILER}
-          password-nodemailer: ${PASSWORD_NODEMAILER}
-          url-confirm-nodemailer: ${URL_CONFIRM_NODEMAILER}
-          confirmation-nodemailer: ${CONFIRMATION_NODEMAILER}
-          app-admin-name: ${APP_ADMIN_NAME}
-          app-admin-pass: ${APP_ADMIN_PASS}
-          app-service: ${SERVICE_NAME}
-          app-service-port: ${SERVICE_PORT}
-          jwt-secret: ${JWT_SECRET}
-          jwt-expires: ${JWT_EXPIRES}
-    - apiVersion: v1
-      kind: Secret
-      metadata:
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-password
+                      name: ${DATABASE_SERVICE_NAME}
+                - name: MONGODB_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: ${DATABASE_SERVICE_NAME}
+                - name: MONGODB_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: ${DATABASE_SERVICE_NAME}
+              image: " "
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 27017
+                timeoutSeconds: 1
+              name: mongodb
+              ports:
+                - containerPort: 27017
+                  protocol: TCP
+              readinessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -i
+                    - -c
+                    - mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD
+                      --eval="quit()"
+                initialDelaySeconds: 3
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  memory: ${MEMORY_LIMIT}
+              securityContext:
+                capabilities: {}
+                privileged: false
+              terminationMessagePath: /dev/termination-log
+              volumeMounts:
+                - mountPath: /var/lib/mongodb/data
+                  name: ${DATABASE_SERVICE_NAME}-data
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          volumes:
+            - emptyDir:
+                medium: ""
+              name: ${DATABASE_SERVICE_NAME}-data
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - mongodb
+            from:
+              kind: ImageStreamTag
+              name: mongodb:${MONGODB_VERSION}
+              namespace: ${MONGO_IS_NAMESPACE}
+            lastTriggeredImage: ""
+          type: ImageChange
+        - type: ConfigChange
+    status: {}
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      annotations:
+        description: Keeps track of changes in the application image
+      name: ${SERVICE_NAME}
+      namespace: ${NAMESPACE}
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: ${SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${SERVICE_NAME}:latest
+      source:
+        contextDir: /
+        git:
+          ref: master
+          uri: ${SERVICE_GIT_URL}
+        type: Git
+        sourceSecret:
           name: ${SERVICE_NAME}-git
-          namespace: ${NAMESPACE}
-      stringData:
-          username: ${SERVICE_GIT_USER}
-          password: ${SERVICE_GIT_PASSWORD}
-    - apiVersion: v1
-      kind: DeploymentConfig
-      metadata:
-          name: ${SERVICE_NAME}
-      spec:
-          replicas: 1
-          selector:
-              deploymentconfig: ${SERVICE_NAME}
-          strategy:
-              resources: {}
-              rollingParams:
-                  intervalSeconds: 1
-                  maxSurge: 25%
-                  maxUnavailable: 25%
-                  timeoutSeconds: 600
-                  updatePeriodSeconds: 1
-              type: Rolling
-          template:
-              metadata:
-                  creationTimestamp: null
-                  labels:
-                      deploymentconfig: ${SERVICE_NAME}
-              spec:
-                  containers:
-                      - name: ${SERVICE_NAME}
-                        image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${SERVICE_NAME}
-                        imagePullPolicy: Always
-                        livenessProbe:
-                            tcpSocket:
-                                port: 5000
-                            initialDelaySeconds: 15
-                            timeoutSeconds: 1
-                            periodSeconds: 10
-                            successThreshold: 1
-                            failureThreshold: 3
-                        readinessProbe:
-                            httpGet:
-                                path: /health
-                                port: 5000
-                                scheme: HTTP
-                            initialDelaySeconds: 15
-                            timeoutSeconds: 10
-                            periodSeconds: 30
-                            successThreshold: 1
-                            failureThreshold: 1
-                        ports:
-                            - containerPort: 5000
-                              protocol: TCP
-                        env:
-                            - name: MONGODB_HOST
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-service-name
-                                      name: ${SERVICE_NAME}
-                            - name: MONGODB_PORT
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-port
-                                      name: ${SERVICE_NAME}
-                            - name: MONGODB_USER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-user
-                                      name: ${SERVICE_NAME}
-                            - name: MONGODB_PASSWORD
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-password
-                                      name: ${SERVICE_NAME}
-                            - name: MONGODB_DATABASE
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: database-name
-                                      name: ${SERVICE_NAME}
-                            - name: APP_SERVICE_CORS
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: app-service-cors
-                                      name: ${SERVICE_NAME}
-                            - name: IMAGE_PASSWORD
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: image-password
-                                      name: ${SERVICE_NAME}
-                            - name: IMAGE_USER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: image-user
-                                      name: ${SERVICE_NAME}
-                            - name: IMAGE_SERVICE
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: image-service
-                                      name: ${SERVICE_NAME}
-                            - name: USER_NODEMAILER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: user-nodemailer
-                                      name: ${SERVICE_NAME}
-                            - name: PASSWORD_NODEMAILER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: password-nodemailer
-                                      name: ${SERVICE_NAME}
-                            - name: URL_CONFIRM_NODEMAILER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: url-confirm-nodemailer
-                                      name: ${SERVICE_NAME}
-                            - name: CONFIRMATION_NODEMAILER
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: confirmation-nodemailer
-                                      name: ${SERVICE_NAME}
-                            - name: APP_ADMIN_NAME
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: app-admin-name
-                                      name: ${SERVICE_NAME}
-                            - name: APP_ADMIN_PASS
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: app-admin-pass
-                                      name: ${SERVICE_NAME}
-                            - name: APP_SERVICE_NAME
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: app-service
-                                      name: ${SERVICE_NAME}
-                            - name: APP_SERVICE_PORT
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: app-service-port
-                                      name: ${SERVICE_NAME}
-                            - name: JWT_SECRET
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: jwt-secret
-                                      name: ${SERVICE_NAME}
-                            - name: JWT_EXPIRES
-                              valueFrom:
-                                  secretKeyRef:
-                                      key: jwt-expires
-                                      name: ${SERVICE_NAME}
-                        resources:
-                            limits:
-                                memory: 1Gi
-                        securityContext:
-                            capabilities: {}
-                            privileged: false
-                        terminationMessagePath: /dev/termination-log
-                  dnsPolicy: ClusterFirst
-                  restartPolicy: Always
-                  securityContext: {}
-                  terminationGracePeriodSeconds: 30
-          triggers:
-              - type: ConfigChange
-      status: {}
+      strategy:
+        sourceStrategy:
+          env:
+            - name: GIT_SSL_NO_VERIFY
+              value: "true"
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+          from:
+            kind: ImageStreamTag
+            name: ${NODEJS_IMAGE}
+            namespace: openshift
+        type: Source
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      ports:
+        - name: ${SERVICE_NAME}-http
+          port: 5000
+          protocol: TCP
+          targetPort: 5000
+      selector:
+        deploymentconfig: ${SERVICE_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    spec:
+      to:
+        kind: Service
+        name: ${SERVICE_NAME}
+      port:
+        targetPort: ${SERVICE_NAME}-http
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+        wildcardPolicy: None
+    status: {}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${SERVICE_NAME}-http
+      namespace: ${NAMESPACE}
+    spec:
+      to:
+        kind: Service
+        name: ${SERVICE_NAME}
+      port:
+        targetPort: ${SERVICE_NAME}-http
+    status: {}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ${SERVICE_NAME}
+      namespace: ${NAMESPACE}
+    stringData:
+      database-service-name: ${DATABASE_SERVICE_NAME}
+      database-port: ${MONGODB_PORT}
+      database-admin-password: ${MONGODB_ADMIN_PASSWORD}
+      database-name: ${MONGODB_DATABASE}
+      database-password: ${MONGODB_PASSWORD}
+      database-user: ${MONGODB_USER}
+      app-service-cors: ${APP_SERVICE_CORS}
+      image-user: ${IMAGE_USER}
+      image-password: ${IMAGE_PASSWORD}
+      image-service: ${IMAGE_SERVICE}
+      user-nodemailer: ${USER_NODEMAILER}
+      password-nodemailer: ${PASSWORD_NODEMAILER}
+      url-confirm-nodemailer: ${URL_CONFIRM_NODEMAILER}
+      confirmation-nodemailer: ${CONFIRMATION_NODEMAILER}
+      app-admin-name: ${APP_ADMIN_NAME}
+      app-admin-pass: ${APP_ADMIN_PASS}
+      app-service: ${SERVICE_NAME}
+      app-service-port: ${SERVICE_PORT}
+      jwt-secret: ${JWT_SECRET}
+      jwt-expires: ${JWT_EXPIRES}
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ${SERVICE_NAME}-git
+      namespace: ${NAMESPACE}
+    stringData:
+      username: ${SERVICE_GIT_USER}
+      password: ${SERVICE_GIT_PASSWORD}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${SERVICE_NAME}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${SERVICE_NAME}
+      strategy:
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            deploymentconfig: ${SERVICE_NAME}
+        spec:
+          containers:
+            - name: ${SERVICE_NAME}
+              image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${SERVICE_NAME}
+              imagePullPolicy: Always
+              livenessProbe:
+                tcpSocket:
+                  port: 5000
+                initialDelaySeconds: 15
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /health
+                  port: 5000
+                  scheme: HTTP
+                initialDelaySeconds: 15
+                timeoutSeconds: 10
+                periodSeconds: 30
+                successThreshold: 1
+                failureThreshold: 1
+              ports:
+                - containerPort: 5000
+                  protocol: TCP
+              env:
+                - name: MONGODB_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-service-name
+                      name: ${SERVICE_NAME}
+                - name: MONGODB_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-port
+                      name: ${SERVICE_NAME}
+                - name: MONGODB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: ${SERVICE_NAME}
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-password
+                      name: ${SERVICE_NAME}
+                - name: MONGODB_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: ${SERVICE_NAME}
+                - name: APP_SERVICE_CORS
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-service-cors
+                      name: ${SERVICE_NAME}
+                - name: IMAGE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: image-password
+                      name: ${SERVICE_NAME}
+                - name: IMAGE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: image-user
+                      name: ${SERVICE_NAME}
+                - name: IMAGE_SERVICE
+                  valueFrom:
+                    secretKeyRef:
+                      key: image-service
+                      name: ${SERVICE_NAME}
+                - name: USER_NODEMAILER
+                  valueFrom:
+                    secretKeyRef:
+                      key: user-nodemailer
+                      name: ${SERVICE_NAME}
+                - name: PASSWORD_NODEMAILER
+                  valueFrom:
+                    secretKeyRef:
+                      key: password-nodemailer
+                      name: ${SERVICE_NAME}
+                - name: URL_CONFIRM_NODEMAILER
+                  valueFrom:
+                    secretKeyRef:
+                      key: url-confirm-nodemailer
+                      name: ${SERVICE_NAME}
+                - name: CONFIRMATION_NODEMAILER
+                  valueFrom:
+                    secretKeyRef:
+                      key: confirmation-nodemailer
+                      name: ${SERVICE_NAME}
+                - name: APP_ADMIN_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-admin-name
+                      name: ${SERVICE_NAME}
+                - name: APP_ADMIN_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-admin-pass
+                      name: ${SERVICE_NAME}
+                - name: APP_SERVICE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-service
+                      name: ${SERVICE_NAME}
+                - name: APP_SERVICE_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      key: app-service-port
+                      name: ${SERVICE_NAME}
+                - name: JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: jwt-secret
+                      name: ${SERVICE_NAME}
+                - name: JWT_EXPIRES
+                  valueFrom:
+                    secretKeyRef:
+                      key: jwt-expires
+                      name: ${SERVICE_NAME}
+              resources:
+                limits:
+                  memory: 1Gi
+              securityContext:
+                capabilities: {}
+                privileged: false
+              terminationMessagePath: /dev/termination-log
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      triggers:
+        - type: ConfigChange
+    status: {}
 parameters:
-    - description: Maximum amount of memory the container can use.
-      displayName: Memory Limit
-      name: MEMORY_LIMIT
-      required: true
-      value: 512Mi
-    - description: The OpenShift Namespace where the ImageStream resides.
-      displayName: Namespace
-      name: NAMESPACE
-      required: true
-    - description: The OpenShift Namespace where the ImageStream resides.
-      displayName: Namespace
-      name: MONGO_IS_NAMESPACE
-      required: true
-      value: openshift
-    - description: The name of the OpenShift Service exposed for the database.
-      displayName: Database Service Name (MongoDB service Name)
-      name: DATABASE_SERVICE_NAME
-      required: true
-      value: mongodb
-    - description: Username for MongoDB user that will be used for accessing the database.
-      displayName: MongoDB service Port
-      value: "27017"
-      name: MONGODB_PORT
-      required: true
-    - description: Username for MongoDB user that will be used for accessing the database.
-      displayName: MongoDB Connection Username
-      from: user[A-Z0-9]{3}
-      generate: expression
-      name: MONGODB_USER
-      required: true
-    - description: Password for the MongoDB connection user.
-      displayName: MongoDB Connection Password
-      from: "[a-zA-Z0-9]{16}"
-      generate: expression
-      name: MONGODB_PASSWORD
-      required: true
-    - description: Name of the MongoDB database accessed.
-      displayName: MongoDB Database Name
-      name: MONGODB_DATABASE
-      required: true
-    - description: Password for the database admin user.
-      displayName: MongoDB Admin Password
-      from: "[a-zA-Z0-9]{16}"
-      generate: expression
-      name: MONGODB_ADMIN_PASSWORD
-      required: true
-    - description: Version of MongoDB image to be used (3.6 or latest).
-      displayName: Version of MongoDB Image
-      name: MONGODB_VERSION
-      required: true
-      value: "3.6"
-    - description: Name of the service NODEJS
-      displayName: NODEJS Service Name
-      name: SERVICE_NAME
-      required: true
-    - description: URL of Linking App
-      displayName: APP_SERVICE_CORS
-      name: APP_SERVICE_CORS
-      required: true
-    - description: Name of the service NODEJS
-      displayName: NODEJS Service Name
-      name: SERVICE_PORT
-      value: "5000"
-      required: true
-    - description: Git repository where service is stored
-      displayName: GIT Service URL
-      name: SERVICE_GIT_URL
-      required: true
-    - description: User with Git repository download permissions
-      displayName: SERVICE_GIT_USER
-      name: SERVICE_GIT_USER
-    - description: Git User Password
-      displayName: SERVICE_GIT_PASSWORD
-      name: SERVICE_GIT_PASSWORD
-    - description: User valid to upload and delete photos
-      displayName: IMAGE_USER
-      name: IMAGE_USER
-      required: true
-    - description: User password valid to upload and delete photos
-      displayName: IMAGE_PASSWORD
-      name: IMAGE_PASSWORD
-      required: true
-    - description: Service valid to upload and delete photos
-      displayName: IMAGE_SERVICE
-      name: IMAGE_SERVICE
-      required: true
-    - description: NodeJS image
-      displayName: NODEJS_IMAGE
-      name: NODEJS_IMAGE
-      value: "nodejs:latest"
-      required: true
-    - description: User valid to send confirmation emails
-      displayName: USER_NODEMAILER
-      name: USER_NODEMAILER
-      required: true
-    - description: User password valid to send confirmation emails
-      displayName: PASSWORD_NODEMAILER
-      name: PASSWORD_NODEMAILER
-      required: true
-    - description: Service valid to confirm users
-      displayName: URL_CONFIRM_NODEMAILER
-      name: URL_CONFIRM_NODEMAILER
-      required: true
-    - description: Sending confirmation emails state
-      displayName: CONFIRMATION_NODEMAILER
-      name: CONFIRMATION_NODEMAILER
-      value: "false"
-      required: true
-    - description: Admin user
-      displayName: APP_ADMIN_NAME
-      name: APP_ADMIN_NAME
-      required: true
-    - description: Admin password
-      displayName: APP_ADMIN_PASS
-      name: APP_ADMIN_PASS
-      required: true
-    - description: JWT secret
-      displayName: JWT_SECRET
-      name: JWT_SECRET
-      required: true
-    - description: JWT time to expire tokens
-      displayName: JWT_EXPIRES
-      name: JWT_EXPIRES
-      required: true
+  - description: Maximum amount of memory the container can use.
+    displayName: Memory Limit
+    name: MEMORY_LIMIT
+    required: true
+    value: 512Mi
+  - description: The OpenShift Namespace where the ImageStream resides.
+    displayName: Namespace
+    name: NAMESPACE
+    required: true
+  - description: The OpenShift Namespace where the ImageStream resides.
+    displayName: Namespace
+    name: MONGO_IS_NAMESPACE
+    required: true
+    value: openshift
+  - description: The name of the OpenShift Service exposed for the database.
+    displayName: Database Service Name (MongoDB service Name)
+    name: DATABASE_SERVICE_NAME
+    required: true
+    value: mongodb
+  - description: Username for MongoDB user that will be used for accessing the database.
+    displayName: MongoDB service Port
+    value: "27017"
+    name: MONGODB_PORT
+    required: true
+  - description: Username for MongoDB user that will be used for accessing the database.
+    displayName: MongoDB Connection Username
+    from: user[A-Z0-9]{3}
+    generate: expression
+    name: MONGODB_USER
+    required: true
+  - description: Password for the MongoDB connection user.
+    displayName: MongoDB Connection Password
+    from: "[a-zA-Z0-9]{16}"
+    generate: expression
+    name: MONGODB_PASSWORD
+    required: true
+  - description: Name of the MongoDB database accessed.
+    displayName: MongoDB Database Name
+    name: MONGODB_DATABASE
+    required: true
+  - description: Password for the database admin user.
+    displayName: MongoDB Admin Password
+    from: "[a-zA-Z0-9]{16}"
+    generate: expression
+    name: MONGODB_ADMIN_PASSWORD
+    required: true
+  - description: Version of MongoDB image to be used (3.6 or latest).
+    displayName: Version of MongoDB Image
+    name: MONGODB_VERSION
+    required: true
+    value: "3.6"
+  - description: Name of the service NODEJS
+    displayName: NODEJS Service Name
+    name: SERVICE_NAME
+    required: true
+  - description: URL of Linking App
+    displayName: APP_SERVICE_CORS
+    name: APP_SERVICE_CORS
+    required: true
+  - description: Name of the service NODEJS
+    displayName: NODEJS Service Name
+    name: SERVICE_PORT
+    value: "5000"
+    required: true
+  - description: Git repository where service is stored
+    displayName: GIT Service URL
+    name: SERVICE_GIT_URL
+    required: true
+  - description: User with Git repository download permissions
+    displayName: SERVICE_GIT_USER
+    name: SERVICE_GIT_USER
+  - description: Git User Password
+    displayName: SERVICE_GIT_PASSWORD
+    name: SERVICE_GIT_PASSWORD
+  - description: User valid to upload and delete photos
+    displayName: IMAGE_USER
+    name: IMAGE_USER
+    required: true
+  - description: User password valid to upload and delete photos
+    displayName: IMAGE_PASSWORD
+    name: IMAGE_PASSWORD
+    required: true
+  - description: Service valid to upload and delete photos
+    displayName: IMAGE_SERVICE
+    name: IMAGE_SERVICE
+    required: true
+  - description: NodeJS image
+    displayName: NODEJS_IMAGE
+    name: NODEJS_IMAGE
+    value: "nodejs:latest"
+    required: true
+  - description: User valid to send confirmation emails
+    displayName: USER_NODEMAILER
+    name: USER_NODEMAILER
+    required: true
+  - description: User password valid to send confirmation emails
+    displayName: PASSWORD_NODEMAILER
+    name: PASSWORD_NODEMAILER
+    required: true
+  - description: Service valid to confirm users
+    displayName: URL_CONFIRM_NODEMAILER
+    name: URL_CONFIRM_NODEMAILER
+    required: true
+  - description: Sending confirmation emails state
+    displayName: CONFIRMATION_NODEMAILER
+    name: CONFIRMATION_NODEMAILER
+    value: "false"
+    required: true
+  - description: Admin user
+    displayName: APP_ADMIN_NAME
+    name: APP_ADMIN_NAME
+    required: true
+  - description: Admin password
+    displayName: APP_ADMIN_PASS
+    name: APP_ADMIN_PASS
+    required: true
+  - description: JWT secret
+    displayName: JWT_SECRET
+    name: JWT_SECRET
+    required: true
+  - description: JWT time to expire tokens
+    displayName: JWT_EXPIRES
+    name: JWT_EXPIRES
+    required: true
