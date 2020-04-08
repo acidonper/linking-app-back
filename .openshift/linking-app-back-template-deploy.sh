@@ -21,7 +21,7 @@ PROJECT_NAME=$1
 DOMAIN=$8
 MONGODB_DATABASE="linking"
 SERVICE_NAME="linking-app-back"
-APP_SERVICE_CORS="https://linking-app-front-${PROJECT_NAME}.${DOMAIN}/"
+APP_SERVICE_CORS="https://linking-app-front-${PROJECT_NAME}.${DOMAIN}"
 SERVICE_GIT_URL="https://github.com/acidonper/linking-app-back.git"
 SERVICE_GIT_USER=$2
 SERVICE_GIT_PASSWORD=$3
@@ -67,11 +67,11 @@ sleep 600
 # Start build image
 oc start-build bc/$SERVICE_NAME -n $PROJECT_NAME
 
-# # Wait for previous process
-# sleep 600
+# Wait for previous process
+sleep 600
 
-# # Start deployment process
-# oc rollout latest $SERVICE_NAME -n $PROJECT_NAME
+# Start deployment process
+oc rollout latest $SERVICE_NAME -n $PROJECT_NAME
 
 
 
