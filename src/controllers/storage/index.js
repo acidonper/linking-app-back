@@ -4,7 +4,7 @@ module.exports = {
   uploadPhoto: async (user, photo) => {
     try {
       const storageUser = process.env.IMAGE_USER;
-      const storagePass = process.env.IMAGES_PASSWORD;
+      const storagePass = process.env.IMAGE_PASSWORD;
       const storageService = process.env.IMAGE_SERVICE;
 
       const data = {
