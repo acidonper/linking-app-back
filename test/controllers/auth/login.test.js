@@ -38,4 +38,8 @@ describe("Authentication Library", () => {
   it("Should delete an user", async () => {
     assert.equal(await userLib.delete({ username: userLogin.username }), true);
   });
+
+  it("Finish", (done) => {
+    done();
+  });
 });
