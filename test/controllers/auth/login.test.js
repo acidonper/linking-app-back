@@ -8,23 +8,22 @@ const mongoose = require("mongoose");
 const Mockgoose = require("mock-mongoose").Mockgoose;
 const mockgoose = new Mockgoose(mongoose);
 
-before(function (done) {
-  mockgoose.prepareStorage().then(function () {
-    mongoose.connect(
-      "mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-      },
-      function (err) {
-        done(err);
-      }
-    );
-  });
-});
-
 describe("Authentication Library", () => {
+  before(function (done) {
+    mockgoose.prepareStorage().then(function () {
+      mongoose.connect(
+        "mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}",
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useCreateIndex: true,
+        },
+        function (err) {
+          done(err);
+        }
+      );
+    });
+  });
   it("Should create a user", async () => {
     assert.equal(await userLib.new(userLogin), true);
   });
