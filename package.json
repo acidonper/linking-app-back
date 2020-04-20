@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "mocha --timeout 60000 --recursive --exit"
+    "test": "mocha --timeout 120000 --recursive --exit"
   },
   "repository": {
     "type": "git",
