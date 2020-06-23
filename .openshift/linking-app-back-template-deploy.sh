@@ -61,18 +61,6 @@ oc process -f linking-app-back-template.yaml  \
 -p JWT_EXPIRES=$JWT_EXPIRES  | oc apply -f - -n $PROJECT_NAME
 
 
-# Wait for mongodb
-sleep 600
-
 # Start build image
 oc start-build bc/$SERVICE_NAME -n $PROJECT_NAME
-
-# Wait for previous process
-sleep 600
-
-# Start deployment process
-oc rollout latest $SERVICE_NAME -n $PROJECT_NAME
-
-
-
 
